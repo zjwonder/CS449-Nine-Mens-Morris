@@ -8,9 +8,9 @@
 
 
 ### Important Resources
-* [Teammate information](https://docs.google.com/spreadsheets/d/1PJ_RM-YvW_qAZiJ6bzr4l55LJQOHZs0YiqlF0ZTopfk/edit?usp=sharing)
+* [Teammate information](https://docs.google.com/spreadsheets/d/1PJ_RM-YvW_qAZiJ6bzr4l55LJQOHZs0YiqlF0ZTopfk/edit?usp=sharing) - email accounts, team ratings, etc.
 
-* [Working user stories/acceptance criteria](https://docs.google.com/document/d/1wG1Lhsdy2DjXby9DdlZFo-rdRNrqEKzk2iKe22Zv7IU/edit?usp=sharing)
+* [Working user stories/acceptance criteria](https://docs.google.com/document/d/1wG1Lhsdy2DjXby9DdlZFo-rdRNrqEKzk2iKe22Zv7IU/edit?usp=sharing) - make edits here and I (Zach) will add them to this readme
 
 ______________
 
