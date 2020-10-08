@@ -40,3 +40,7 @@ To know how many game pieces I have left to place (1st phase) |	I can strategize
 As a player, I want... |    so that...    | Acceptance criteria
 ------------ | ------------- | -------------
 To play 3, 6, or 12 Men’s Morris |	I can have more variety in my life |	Board changes to correct board. Player is given appropriate number of pieces.
+
+## Resources
+[Teammate information](https://docs.google.com/spreadsheets/d/1PJ_RM-YvW_qAZiJ6bzr4l55LJQOHZs0YiqlF0ZTopfk/edit?usp=sharing)
+[Working user stories/acceptance criteria](https://docs.google.com/document/d/1wG1Lhsdy2DjXby9DdlZFo-rdRNrqEKzk2iKe22Zv7IU/edit?usp=sharing)
