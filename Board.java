@@ -26,28 +26,27 @@ public class Board {
 	
 	// method to help test current functions by plugging in location values
 	public void placePiece(String color) {
-		List<Integer> testSpaces =  new ArrayList<Integer>();
-		testSpaces.add(11);
-		testSpaces.add(14);
-		testSpaces.add(17);
-		testSpaces.add(34);
-		testSpaces.add(33);
-		testSpaces.add(71);
-		testSpaces.add(54);
-		testSpaces.add(42);
-		testSpaces.add(-1); 
-		System.out.print(testSpaces + "\n");
+		whitePieces.set(0, 11);
+		whitePieces.set(1, 14);
+		whitePieces.set(2, 17);
+		whitePieces.set(3, 34);
+		whitePieces.set(4, 33);
+		whitePieces.set(5, 71);
+		whitePieces.set(6, 54);
+		whitePieces.set(7, 42);
+		whitePieces.set(8, -1); 
+		//System.out.print(whitePieces + "\n");
 	}
 	
 	Board(int numPieces){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
 		for (int i = 0; i < numPieces; i++) {
 			whitePieces.add(0);
 			blackPieces.add(0);
-			}
+		}
 		// gives each player as many pieces as are needed for the game. Their values are all 0 to represent that they haven't been placed, yet.
 		this.readSpaces();
-		// System.out.println(whitePieces);
 		this.placePiece("white");
+		// System.out.println(whitePieces);
 	}
 	
 	public void readSpaces() {
