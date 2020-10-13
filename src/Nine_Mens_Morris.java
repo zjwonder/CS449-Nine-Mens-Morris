@@ -10,6 +10,7 @@ public class Nine_Mens_Morris {
 		
 		if (pw_attempt.equals("test")) { // enter correct code to initialize automated testing
 			Test_Cases test_obj = new Test_Cases();
+			test_obj.initializer();
 		}
 		
 		else {

@@ -7,13 +7,33 @@ public class Test_Cases {
 		System.out.print("Initializing automated tests...");
 		Board test_board = new Board(9);
 		Game_Logic test_game = new Game_Logic();
+		
+	}
+		
+	public void initializer() {
 		Test_Cases test_object = new Test_Cases();
+		wait(500);
 		System.out.println("Testing game piece placement... " + test_object.piece_placement());
+		wait(500);
 		System.out.println("Testing stack decrementing... " + test_object.stack_decrement());
+		wait(500);
 		System.out.println("Testing board object... " + test_object.board_exists());
+		wait(500);
 		System.out.println("Testing move validation... " + test_object.valid_move());
+		wait(500);
 		System.out.println("Testing victory qualifiers... " + test_object.victory());
 		
+	}
+	
+	public static void wait(int ms) {
+	    try
+	    {
+	        Thread.sleep(ms);
+	    }
+	    catch(InterruptedException ex)
+	    {
+	        Thread.currentThread().interrupt();
+	    }
 	}
 	
 	public String piece_placement() {
