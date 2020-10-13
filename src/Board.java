@@ -2,6 +2,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Scanner;
 
 public class Board {
@@ -11,121 +12,92 @@ public class Board {
 	List<Integer> blackPieces = new ArrayList<Integer>(); // All pieces start with value 0, are updated to the value of the spot where they're placed, and are deleted when a piece is removed from the board.
 	List<int[]> mills = new ArrayList<int[]>();
 	
-	
-	
-	Board(){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
-		for (int i = 0; i < 9; i++) {
-			whitePieces.add(0);
-			blackPieces.add(0);
-			}
-		// gives each player as many pieces as are needed for the game. Their values are all 0 to represent that they haven't been placed, yet.
-		this.readSpaces();
-		//System.out.println(whitePieces);
+	public int getNumPieces(String color){ // getter for finding the number of pieces a player has
+		if (color == "white") {
+			return whitePieces.size(); 
 		}
+		else if (color == "black") {
+			return blackPieces.size();
+		}
+		else {
+			System.out.print("error"); // extraneous else to tell if something went wrong
+			return 0;
+		}
+	}
 	
-	Board(int numPieces){ // Same as above but overloaded to make implementing other game types easier
+	// method to help test current functions by plugging in location values
+	public void placePiece(String color) {
+		whitePieces.set(0, 11);
+		whitePieces.set(1, 24);
+		whitePieces.set(2, 17);
+		whitePieces.set(3, 26);
+		whitePieces.set(4, 33);
+		whitePieces.set(5, 45);
+		whitePieces.set(6, 54);
+		whitePieces.set(7, 42);
+		whitePieces.set(8, 77); 
+		blackPieces.set(0, 47);
+		blackPieces.set(1, 47);
+		blackPieces.set(2, 47);
+		blackPieces.set(3, 47);
+		blackPieces.set(4, 47);
+		blackPieces.set(5, 47);
+		blackPieces.set(6, 47);
+		blackPieces.set(7, 47);
+		blackPieces.set(8, 47);
+		
+		System.out.print(whitePieces + "\n");
+	}
+	
+	Board(int numPieces){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
 		for (int i = 0; i < numPieces; i++) {
 			whitePieces.add(0);
 			blackPieces.add(0);
-			}
-		/*if (numPieces == 9) {
-			this.readSpaces("src\\9MM Spaces.txt");
-		}*/
-		switch(numPieces) {
-		case 3:
-			this.readSpaces("src\\3MM Spaces.txt");
-			break;
-		case 6:
-			this.readSpaces("src\\6MM Spaces.txt");
-			break;
-		case 12:
-			this.readSpaces("src\\12MM Spaces.txt");
-			break;
-		default:
-			this.readSpaces("src\\9MM Spaces.txt");
-			break;
 		}
-		
-		//System.out.println(whitePieces);
-		}
-
+		// gives each player as many pieces as are needed for the game. Their values are all 0 to represent that they haven't been placed, yet.
+		readSpaces();
+		System.out.println(spaces);
+		this.placePiece("white");
 	
+		System.out.println(whitePieces);
+	}
 	
-public void readSpaces() {
-	// Reads a text file with all the valid spaces, their valid connections, and valid mills. This should also make different versions easier to implement.
-	try (Scanner scanner = new Scanner(new File("src\\9MM Spaces.txt"))) {
-		int tempKey;
-		int[] tempMill = new int[3];
-		List<Integer> tempVals = new ArrayList<Integer>();
-		Scanner nextLine;
-
-		while (scanner.hasNext()) { // loops until -1 is seen
-			nextLine = new Scanner(scanner.nextLine()); // reads next line of file
-			tempKey = nextLine.nextInt(); // gets key from first integer in the line.
-			if (tempKey == -1) { // -1 in the input file tells program when to stop adding connections and to start adding mills
-				break;
+	public void readSpaces() {
+		// Reads a text file with all the valid spaces and their valid connections. This should also make different versions easier to implement.
+		try (Scanner scanner = new Scanner(new File("src\\9MM Spaces.txt"))) {
+			int tempKey;
+			int[] tempMill = new int[3];
+			
+			Scanner nextLine;
+	
+			while (scanner.hasNext()) { // loops until end of file
+				List<Integer> tempVals = new ArrayList<Integer>();
+				nextLine = new Scanner(scanner.nextLine()); // reads next line of file
+				tempKey = nextLine.nextInt(); // gets key from first integer in the line.
+				if (tempKey == -1) { // -1 in the input file tells program when to stop adding connections and to start adding mills
+					break;
+				}
+				while (nextLine.hasNextInt()) { // loops until the end of the line
+					tempVals.add(nextLine.nextInt()); // adds next integer to tempVals
+				}
+				spaces.put(tempKey, tempVals); // adds a new map to the HashMap
+				// System.out.print("Key: " + tempKey + "  Valid Moves: " + spaces.get(tempKey) + "\n"); // This is just a test line to show the file was read correctly
+				//tempVals.clear();
+				
 			}
-			while (nextLine.hasNextInt()) { // loops until the end of the line
-				tempVals.add(nextLine.nextInt()); // adds next integer to tempVals
-			}
-			spaces.put(tempKey, tempVals); // adds a new map to the HashMap
-			System.out.print("Key: " + tempKey + "  Valid Moves: " + spaces.get(tempKey) + "\n"); // This is just a test line to show the file was read correctly
-			tempVals.clear();
-		}
-		
-		while (scanner.hasNext()) { // loops until end of file
+			
+			while (scanner.hasNext()) { // loops until end of file
 			nextLine = new Scanner(scanner.nextLine());
 			for (int i = 0; i < 3; i++) {
 				tempMill[i] = nextLine.nextInt();
-				System.out.print(tempMill[i] + " ");
+				//System.out.print(tempMill[i] + " ");
 			}
-			System.out.println();
+			//System.out.println();
 			mills.add(tempMill);
 		}
 		scanner.close();
-		
-	} catch (Exception e) {
-		System.err.println("something broke");
-	}
-}
-
-
-
-public void readSpaces(String gametypeFile) { 
-	// Same as above but overloaded to make implementing other game types easier
-	try (Scanner scanner = new Scanner(new File(gametypeFile))) {
-		int tempKey;
-		int[] tempMill = new int[3];
-		List<Integer> tempVals = new ArrayList<Integer>();
-		Scanner nextLine;
-
-		while (scanner.hasNext()) { // loops until -1 is seen
-			nextLine = new Scanner(scanner.nextLine()); // reads next line of file
-			tempKey = nextLine.nextInt(); // gets key from first integer in the line.
-			if (tempKey == -1) { // -1 in the input file tells program when to stop adding connections and to start adding mills
-				break;
-			}
-			while (nextLine.hasNextInt()) { // loops until the end of the line
-				tempVals.add(nextLine.nextInt()); // adds next integer to tempVals
-			}
-			spaces.put(tempKey, tempVals); // adds a new map to the HashMap
-			System.out.print("Key: " + tempKey + "  Valid Moves: " + spaces.get(tempKey) + "\n"); // This is just a test line to show the file was read correctly
-			tempVals.clear();
+		} catch (Exception e) {
+			System.err.println("something broke");
 		}
-		
-		while (scanner.hasNext()) { // loops until end of file
-			nextLine = new Scanner(scanner.nextLine());
-			for (int i = 0; i < 3; i++) {
-				tempMill[i] = nextLine.nextInt();
-				System.out.print(tempMill[i] + " ");
-			}
-			System.out.println();
-			mills.add(tempMill);
-		}
-		scanner.close();
-		
-	} catch (Exception e) {
-		System.err.println("something broke");
 	}
-}
 }
