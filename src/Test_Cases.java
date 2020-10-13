@@ -4,60 +4,47 @@ public class Test_Cases {
 	// class for testing functionality required by acceptance criteria
 	
 	public static void main(String[] args) { // initializes testing of all acceptance criteria
+		System.out.print("Initializing automated tests...");
 		Board test_board = new Board(9);
 		Game_Logic test_game = new Game_Logic();
-		Test_Cases test_method = new Test_Cases();
-		System.out.print(test_method.piece_placement());
-		System.out.print(test_method.stack_decrement());
-		System.out.print(test_method.mill());
-		System.out.print(test_method.remove_piece());
-		System.out.print(test_method.victory());
-		System.out.print(test_method.flying());
-		System.out.print(test_method.piece_placement());
-		System.out.print(test_method.piece_placement());
+		Test_Cases test_object = new Test_Cases();
+		System.out.println("Testing game piece placement... " + test_object.piece_placement());
+		System.out.println("Testing stack decrementing... " + test_object.stack_decrement());
+		System.out.println("Testing board object... " + test_object.board_exists());
+		System.out.println("Testing move validation... " + test_object.valid_move());
+		System.out.println("Testing victory qualifiers... " + test_object.victory());
 		
 	}
 	
 	public String piece_placement() {
 		// TODO
 		// checks to make sure piece can be placed on board
-		return "fail";
+		return "failed";
 	}
 	
 	public String stack_decrement() {
 		// TODO
 		// checks to make sure unplaced game piece stack was decremented by piece_placement()
-		return "fail";
+		return "failed";
 	}
 	
-	public String mill() {
+	public String board_exists() {
 		// TODO
-		// creates a mill and checks to see if Game_Logic identifies it
-		return "fail";
+		// checks to see if board object was created
+		return "failed";
 	}
 	
-	public String remove_piece() {
+	public String valid_move() {
 		// TODO
-		// tests if opponent's piece can be removed
-		return "fail";
-	}
-	
-	public String flying() {
-		// TODO
-		// removes pieces down to 3 on the board, then tests to see if player with only 3 active game pieces may "fly"
-		return "fail";
+		// tests to make sure Game_Logic is checking move validity
+		return "failed";
 	}
 	
 	public String victory() {
 		// TODO
-		// tests to see if victory conditions are tested
-		return "fail";
-	}
-	
-	public String congratulations() {
-		// TODO
-		// tests to see if winner is detected and congratulated
-		return "fail";
+		// tests for victory/match end under appropriate conditions:
+		// a player must be down to two pieces or have no legal moves
+		return "failed";
 	}
 	
 }
