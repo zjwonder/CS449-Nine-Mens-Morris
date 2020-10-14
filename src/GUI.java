@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class gui {
+public class GUI {
 
 	private JFrame frame;
 
@@ -19,7 +19,7 @@ public class gui {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					gui window = new gui();
+					GUI window = new GUI();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -31,7 +31,7 @@ public class gui {
 	/**
 	 * Create the application.
 	 */
-	public gui() {
+	public GUI() {
 		initialize();
 	}
 
