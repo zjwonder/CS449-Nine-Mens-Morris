@@ -23,5 +23,4 @@ public class Nine_Mens_Morris {
 		System.out.print(test.whitePieces);*/
 		}
 	}
-
 }

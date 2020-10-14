@@ -100,4 +100,8 @@ public class Board {
 			System.err.println("something broke");
 		}
 	}
+	
+	public boolean exists() { // for testing purposes
+		return true;
+	}
 }
