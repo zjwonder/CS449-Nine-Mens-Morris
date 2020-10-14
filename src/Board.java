@@ -26,7 +26,14 @@ public class Board {
 	}
 	
 	// method to help test current functions by plugging in location values
-	public void placePiece(String color) {
+	public void placePiece(String color, int piecesIndex, int space) { // places the given piece at the given spot for the given player.
+		if (color == "white") {
+			whitePieces.set(piecesIndex, space);
+		}
+		if (color == "black") {
+			blackPieces.set(piecesIndex, space);
+		}
+		/*System.out.print(whitePieces + "\n");
 		whitePieces.set(0, 11);
 		whitePieces.set(1, 24);
 		whitePieces.set(2, 17);
@@ -44,22 +51,65 @@ public class Board {
 		blackPieces.set(5, 47);
 		blackPieces.set(6, 47);
 		blackPieces.set(7, 47);
-		blackPieces.set(8, 47);
+		blackPieces.set(8, 47);*/
 		
-		System.out.print(whitePieces + "\n");
+	}
+	
+	public void movePiece(String color, int oldSpace, int newSpace) {
+		if (blackPieces.contains(newSpace) || whitePieces.contains(newSpace) || !spaces.get(oldSpace).contains(newSpace)) { 
+			//makes sure neither player has the desired space and makes sure the new space is a valid movement from the old space
+			Test_Cases.setMoveCheckStatus(true);
+			System.out.println("Not a valid move!");
+		}
+	
+		else if (color == "white") {
+			
+			Test_Cases.setMoveCheckStatus(true);
+			whitePieces.set(whitePieces.indexOf(oldSpace), newSpace);
+			System.out.println("movePiece worked!");
+		}
+		else if (color == "black") {
+			Test_Cases.setMoveCheckStatus(true);
+			blackPieces.set(blackPieces.indexOf(oldSpace), newSpace);
+			System.out.println("movePiece worked!");
+		}
+		
 	}
 	
 	Board(int numPieces){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
+		Test_Cases.setBoardExists(true);
+		
 		for (int i = 0; i < numPieces; i++) {
 			whitePieces.add(0);
 			blackPieces.add(0);
+			// gives each player as many pieces as are needed for the game. Their values are all 0 to represent that they haven't been placed, yet.
 		}
-		// gives each player as many pieces as are needed for the game. Their values are all 0 to represent that they haven't been placed, yet.
+		placePiece("white", 0,11); // This is simulating the players placing their pieces
+		placePiece("white", 1,24); 
+		placePiece("white", 2,17);
+		placePiece("white", 3,26);
+		placePiece("white", 4,33);
+		placePiece("white", 5,45);
+		placePiece("white", 6,54);
+		placePiece("white", 7,42);
+		placePiece("white", 8,77);
+		placePiece("black", 0,46);
+		placePiece("black", 1,14);
+		placePiece("black", 2,14);
+		placePiece("black", 3,14);
+		placePiece("black", 4,14);
+		placePiece("black", 5,14);
+		placePiece("black", 6,14);
+		placePiece("black", 7,14);
+		placePiece("black", 8,14);
+		
+		
 		readSpaces();
 		System.out.println(spaces);
-		this.placePiece("white");
+		//this.placePiece("white");
 	
 		System.out.println(whitePieces);
+		System.out.println(blackPieces);
 	}
 	
 	public void readSpaces() {
@@ -99,9 +149,5 @@ public class Board {
 		} catch (Exception e) {
 			System.err.println("something broke");
 		}
-	}
-	
-	public boolean exists() { // for testing purposes
-		return true;
 	}
 }

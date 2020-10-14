@@ -11,15 +11,35 @@ public class Game_Logic {
 	Game_Logic(){ // constructor for game logic class
 		String color = "black";
 		Board board = new Board(9);
-		winCondition(color, board);
+		
+
+		
+		winCondition("white", board);
+		winCondition("black", board);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		board.movePiece("black", 46, 100);
+		System.out.println("black = " + board.blackPieces);
+		board.movePiece("black", 46, 47);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		winCondition("white", board);
+		winCondition("black", board);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		board.movePiece("white", 45, 46);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		winCondition("white", board);
+		winCondition("black", board);
 	}
 	
 	public boolean winCondition(String color, Board board){ // method for checking if win condition has been meet; return true if game is won, return false if not; must pass in color for player that is being checked
 		//Board board = new Board(9);
+		Test_Cases.setWinCheckStatus(true);
 		
-		
-		ListIterator<Integer> whiteiterator = board.whitePieces.listIterator(); // iterators for lists of pieces so we can move through them
-		ListIterator<Integer> blackiterator = board.blackPieces.listIterator();
+		//ListIterator<Integer> whiteiterator = board.whitePieces.listIterator(); // iterators for lists of pieces so we can move through them
+		//ListIterator<Integer> blackiterator = board.blackPieces.listIterator();
 		
 		if (numPieces(color, board)) { // checking if number of pieces in less than or equal to 2
 			System.out.print("numPieces\n");
@@ -27,13 +47,14 @@ public class Game_Logic {
 			return true;
 		}
 		else if (color == "white") { // checking to make sure white has valid moves
-			System.out.print("Calling availableMoves(white)\n");
+			System.out.println("Calling availableMoves " + color);
 			if (availableMoves(color, board.whitePieces, board.blackPieces, board.spaces)) {
 				System.out.print(color + " has lost!");
 				return true;
 			}
 		}
 		else if (color == "black") { // checking to make sure black has valid moves
+			System.out.println("Calling availableMoves " + color);
 			if (availableMoves(color, board.blackPieces, board.whitePieces, board.spaces)) {
 				System.out.print(color + " has lost!");
 				return true;
@@ -42,7 +63,6 @@ public class Game_Logic {
 		// nobody has won the game so we continue
 		return false;
 	}
-	
 
 	public boolean availableMoves(String color, List<Integer> playerPieces, List<Integer> opponentPieces, HashMap<Integer, List<Integer>> spaces) { // checks to make sure player provided has available moves, if not game lost
 		Set<Integer> playerMoves = new HashSet<Integer>(); // creates a set to store possible player moves
@@ -73,8 +93,6 @@ public class Game_Logic {
 		}
 	}
 }
-
-
 
 
 
