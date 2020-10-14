@@ -14,7 +14,7 @@ public class Game_Logic {
 		
 
 		
-		/*winCondition("white", board);
+		winCondition("white", board);
 		winCondition("black", board);
 		System.out.println("white = " + board.whitePieces);
 		System.out.println("black = " + board.blackPieces);
@@ -31,12 +31,12 @@ public class Game_Logic {
 		System.out.println("white = " + board.whitePieces);
 		System.out.println("black = " + board.blackPieces);
 		winCondition("white", board);
-		winCondition("black", board);*/
+		winCondition("black", board);
 	}
 	
 	public boolean winCondition(String color, Board board){ // method for checking if win condition has been meet; return true if game is won, return false if not; must pass in color for player that is being checked
 		//Board board = new Board(9);
-		
+		Test_Cases.setWinCheckStatus(true);
 		
 		//ListIterator<Integer> whiteiterator = board.whitePieces.listIterator(); // iterators for lists of pieces so we can move through them
 		//ListIterator<Integer> blackiterator = board.blackPieces.listIterator();
@@ -63,7 +63,6 @@ public class Game_Logic {
 		// nobody has won the game so we continue
 		return false;
 	}
-	
 
 	public boolean availableMoves(String color, List<Integer> playerPieces, List<Integer> opponentPieces, HashMap<Integer, List<Integer>> spaces) { // checks to make sure player provided has available moves, if not game lost
 		Set<Integer> playerMoves = new HashSet<Integer>(); // creates a set to store possible player moves
@@ -94,8 +93,6 @@ public class Game_Logic {
 		}
 	}
 }
-
-
 
 
 
