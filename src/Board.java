@@ -33,8 +33,8 @@ public class Board {
 		if (color == "black") {
 			blackPieces.set(piecesIndex, space);
 		}
-		System.out.print(whitePieces + "\n");
-		/*whitePieces.set(0, 11);
+		/*System.out.print(whitePieces + "\n");
+		whitePieces.set(0, 11);
 		whitePieces.set(1, 24);
 		whitePieces.set(2, 17);
 		whitePieces.set(3, 26);
@@ -79,7 +79,7 @@ public class Board {
 			blackPieces.add(0);
 			// gives each player as many pieces as are needed for the game. Their values are all 0 to represent that they haven't been placed, yet.
 		}
-		placePiece("white", 0,11); // This is simulating the players placing their pieces
+		/*placePiece("white", 0,11); // This is simulating the players placing their pieces
 		placePiece("white", 1,24); 
 		placePiece("white", 2,17);
 		placePiece("white", 3,26);
@@ -96,15 +96,15 @@ public class Board {
 		placePiece("black", 5,14);
 		placePiece("black", 6,14);
 		placePiece("black", 7,14);
-		placePiece("black", 8,14);
+		placePiece("black", 8,14);*/
 		
 		
 		readSpaces();
-		System.out.println(spaces);
-		//this.placePiece("white");
+		/*System.out.println(spaces);
+		this.placePiece("white");
 	
 		System.out.println(whitePieces);
-		System.out.println(blackPieces);
+		System.out.println(blackPieces);*/
 	}
 	
 	public void readSpaces() {

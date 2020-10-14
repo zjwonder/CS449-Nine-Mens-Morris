@@ -14,7 +14,7 @@ public class Game_Logic {
 		
 
 		
-		winCondition("white", board);
+		/*winCondition("white", board);
 		winCondition("black", board);
 		System.out.println("white = " + board.whitePieces);
 		System.out.println("black = " + board.blackPieces);
@@ -31,7 +31,7 @@ public class Game_Logic {
 		System.out.println("white = " + board.whitePieces);
 		System.out.println("black = " + board.blackPieces);
 		winCondition("white", board);
-		winCondition("black", board);
+		winCondition("black", board);*/
 	}
 	
 	public boolean winCondition(String color, Board board){ // method for checking if win condition has been meet; return true if game is won, return false if not; must pass in color for player that is being checked
