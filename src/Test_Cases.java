@@ -105,7 +105,6 @@ public class Test_Cases {
 	}
 	
 	public String victory() {
-		// TODO
 		// tests boolean value to see if it was changed by winCondition();
 		if (winCheckStatus) {
 			winCheckStatus = false;

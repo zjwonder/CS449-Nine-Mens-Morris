@@ -34,6 +34,20 @@ public class Game_Logic {
 		winCondition("black", board);
 	}
 	
+	public void phaseOne(String player, String opponent, Board board, int playerIndex, int spaceToRemove, int space) {
+		board.placePiece(player, playerIndex, space);
+		if (board.checkMill(player, space)) {
+			board.removePiece(opponent, spaceToRemove);
+		}
+	}
+	
+	public void PhaseTwo(String player, String opponent, Board board, int oldSpace, int newSpace, int spaceToRemove) {
+        board.movePiece(player, oldSpace, newSpace);
+        if(board.checkMill(player, newSpace)) {
+            board.removePiece(opponent, spaceToRemove);
+        }
+    }
+	
 	public boolean winCondition(String color, Board board){ // method for checking if win condition has been meet; return true if game is won, return false if not; must pass in color for player that is being checked
 		//Board board = new Board(9);
 		Test_Cases.setWinCheckStatus(true);
@@ -63,6 +77,7 @@ public class Game_Logic {
 		// nobody has won the game so we continue
 		return false;
 	}
+	
 
 	public boolean availableMoves(String color, List<Integer> playerPieces, List<Integer> opponentPieces, HashMap<Integer, List<Integer>> spaces) { // checks to make sure player provided has available moves, if not game lost
 		Set<Integer> playerMoves = new HashSet<Integer>(); // creates a set to store possible player moves
