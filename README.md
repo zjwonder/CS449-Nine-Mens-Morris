@@ -10,7 +10,11 @@
 ### Important Resources
 * [Teammate information](https://docs.google.com/spreadsheets/d/1PJ_RM-YvW_qAZiJ6bzr4l55LJQOHZs0YiqlF0ZTopfk/edit?usp=sharing) - email accounts, team ratings, etc.
 
-* [Working user stories/acceptance criteria](https://docs.google.com/document/d/1wG1Lhsdy2DjXby9DdlZFo-rdRNrqEKzk2iKe22Zv7IU/edit?usp=sharing) - make edits here and I (Zach) will add them to this readme
+* [Working user stories/acceptance criteria](https://docs.google.com/document/d/1wG1Lhsdy2DjXby9DdlZFo-rdRNrqEKzk2iKe22Zv7IU/edit?usp=sharing) - self-explanatory
+
+* [Board visualization document](https://docs.google.com/spreadsheets/d/1aQoyXNr8jRJsg25aukTg3_zO8-jkzYemJTUApN6d4jU/edit#gid=0) - helpful notes for understanding coordinates
+
+* [Back-End Pseudo Code](https://docs.google.com/document/d/14y_qfz2vhOcbCDyGUP4JybVqBXPMvdqiUmg9Q-RVs1A/edit?usp=sharing) - notes on back-end development
 
 ______________
 
