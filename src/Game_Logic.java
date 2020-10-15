@@ -12,9 +12,57 @@ public class Game_Logic {
 		String color = "black";
 		Board board = new Board(9);
 		
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 0, 11);
+		phaseOne("black", "white", board, 0, 77);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 0, 14);
+		phaseOne("black", "white", board, 0, 71);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 71, 17);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("black", "white", board, 0, 71);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 0, 22);
+		phaseOne("black", "white", board, 22, 74);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 0, 22);
+		phaseOne("black", "white", board, 0, 66);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 0, 42);
+		phaseOne("black", "white", board, 0, 62);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 0, 34);
+		phaseOne("black", "white", board, 0, 54);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 0, 26);
+		phaseOne("black", "white", board, 0, 31);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		phaseOne("white", "black", board, 0, 45);
+		phaseOne("black", "white", board, 0, 33);
+		System.out.println("white = " + board.whitePieces);
+		System.out.println("black = " + board.blackPieces);
+		
+		
+		
+		
+		
+		
+		
+		//winCondition("white", board);
 
 		
-		winCondition("white", board);
+		/*winCondition("white", board);
 		winCondition("black", board);
 		System.out.println("white = " + board.whitePieces);
 		System.out.println("black = " + board.blackPieces);
@@ -31,11 +79,11 @@ public class Game_Logic {
 		System.out.println("white = " + board.whitePieces);
 		System.out.println("black = " + board.blackPieces);
 		winCondition("white", board);
-		winCondition("black", board);
+		winCondition("black", board);*/
 	}
 	
-	public void phaseOne(String player, String opponent, Board board, int playerIndex, int spaceToRemove, int space) {
-		board.placePiece(player, playerIndex, space);
+	public void phaseOne(String player, String opponent, Board board, int spaceToRemove, int space) {
+		board.placePiece(player, space);
 		if (board.checkMill(player, space)) {
 			board.removePiece(opponent, spaceToRemove);
 		}
@@ -50,7 +98,7 @@ public class Game_Logic {
 	
 	public boolean winCondition(String color, Board board){ // method for checking if win condition has been meet; return true if game is won, return false if not; must pass in color for player that is being checked
 		//Board board = new Board(9);
-		Test_Cases.setWinCheckStatus(true);
+		//Test_Cases.setWinCheckStatus(true);
 		
 		//ListIterator<Integer> whiteiterator = board.whitePieces.listIterator(); // iterators for lists of pieces so we can move through them
 		//ListIterator<Integer> blackiterator = board.blackPieces.listIterator();

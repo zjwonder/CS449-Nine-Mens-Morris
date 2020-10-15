@@ -21,14 +21,14 @@ public class Board {
 			blackPieces.add(0);
 			// gives each player as many pieces as are needed for the game. Their values are all 0 to represent that they haven't been placed, yet.
 		}
-		placePiece("white", 0,11); // This is simulating the players placing their pieces
+		/*placePiece("white", 0,11); // This is simulating the players placing their pieces
 		placePiece("white", 1,14); 
 		if (!checkMill("white", 11)) {
 		}
 		placePiece("white", 2,17);
 		if (checkMill("white", 17)) {
 		}
-		/*
+		
 		placePiece("white", 3,26);
 		placePiece("white", 4,33);
 		placePiece("white", 5,45);
@@ -46,11 +46,11 @@ public class Board {
 		placePiece("black", 8,14);*/
 		
 		
-		System.out.println(spaces);
+		/*System.out.println(spaces);
 		//this.placePiece("white");
 	
 		System.out.println(whitePieces);
-		System.out.println(blackPieces);
+		System.out.println(blackPieces);*/
 	}
 	
 	public int getNumPieces(String color){ // getter for finding the number of pieces a player has
@@ -67,12 +67,12 @@ public class Board {
 	}
 	
 	// method to help test current functions by plugging in location values
-	public void placePiece(String color, int piecesIndex, int space) { // places the given piece at the given spot for the given player.
+	public void placePiece(String color, int space) { // places the given piece at the given spot for the given player.
 		if (color == "white") {
-			whitePieces.set(piecesIndex, space);
+			whitePieces.set(whitePieces.indexOf(0), space);
 		}
 		if (color == "black") {
-			blackPieces.set(piecesIndex, space);
+			blackPieces.set(blackPieces.indexOf(0), space);
 		}
 		/*System.out.print(whitePieces + "\n");
 		whitePieces.set(0, 11);
