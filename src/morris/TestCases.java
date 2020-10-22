@@ -16,8 +16,8 @@ public class TestCases {
 		
 	public void initializer() {
 		Board board = new Board(9);
-		Game_Logic game = new Game_Logic();
-		Test_Cases autoTest = new Test_Cases();
+		GameLogic game = new GameLogic();
+		TestCases autoTest = new TestCases();
 		System.out.println("\nInitializing automated tests...");
 		wait(500);
 		System.out.println("Testing game piece placement... " + autoTest.piecePlacement(board));
@@ -66,7 +66,7 @@ public class TestCases {
 		String color = "black";
 		int index = 0;
 		int space = 77;
-		board.placePiece(color, index, space);
+		board.placePiece(color, space);
 		
 		return "failed";
 	}
