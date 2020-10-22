@@ -1,3 +1,4 @@
+package morris;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -6,9 +7,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Game_Logic {
+public class GameLogic {
 
-	Game_Logic(){ // constructor for game logic class
+	GameLogic(){ // constructor for game logic class
 		String color = "black";
 		Board board = new Board(9);
 		
@@ -36,7 +37,7 @@ public class Game_Logic {
 	
 	public boolean winCondition(String color, Board board){ // method for checking if win condition has been meet; return true if game is won, return false if not; must pass in color for player that is being checked
 		//Board board = new Board(9);
-		Test_Cases.setWinCheckStatus(true);
+		TestCases.setWinCheckStatus(true);
 		
 		//ListIterator<Integer> whiteiterator = board.whitePieces.listIterator(); // iterators for lists of pieces so we can move through them
 		//ListIterator<Integer> blackiterator = board.blackPieces.listIterator();
