@@ -13,7 +13,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -24,51 +23,555 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     	// Here we edit the window for aesthetics and readability
     	stage.setTitle("Nine Men's Morris"); // sets title of window
     	stage.setResizable(false);			 // disables ability to resize window
-    	final Text whitePieces = new Text(15,10,"White Pieces");
-    	final Text blackPieces = new Text(815,10,"Black Pieces");
+    	final Text whiteText = new Text(15,10,"White Pieces");
+    	final Text blackText = new Text(815,10,"Black Pieces");
     	Pane pane = new Pane();				
-    	pane.getChildren().add(whitePieces);
-    	pane.getChildren().add(blackPieces);
+    	pane.getChildren().add(whiteText);
+    	pane.getChildren().add(blackText);
     	
     	// Here we create a background visual which displays the board
-    	Image background = new Image("/nineMensMorris.png");
-    	ImageView mv = new ImageView(background);
+    	ImageView mv = new ImageView("/nineMensMorris.png");
     	mv.setX(150); mv.setY(50);
     	pane.getChildren().addAll(mv);
     	 	
     	// Here we create a image of a white piece
-    	final Image source = new Image("/white_transparent.png");
-    	ImageView sourceMV = new ImageView(source);
-    	sourceMV.setFitHeight(35);
-    	sourceMV.setFitWidth(35);
-    	pane.getChildren().add(sourceMV);
+    	ImageView whitePiece1 = new ImageView("/white_transparent.png");
+    	whitePiece1.setFitHeight(35); whitePiece1.setFitWidth(35); whitePiece1.setX(50); whitePiece1.setY(50); pane.getChildren().add(whitePiece1);
+    	ImageView whitePiece2 = new ImageView("/white_transparent.png");
+    	whitePiece2.setFitHeight(35); whitePiece2.setFitWidth(35); whitePiece2.setX(50); whitePiece2.setY(50); pane.getChildren().add(whitePiece2);
+    	ImageView whitePiece3 = new ImageView("/white_transparent.png");
+    	whitePiece3.setFitHeight(35); whitePiece3.setFitWidth(35); whitePiece3.setX(50); whitePiece3.setY(50); pane.getChildren().add(whitePiece3);
+    	ImageView whitePiece4 = new ImageView("/white_transparent.png");
+    	whitePiece4.setFitHeight(35); whitePiece4.setFitWidth(35); whitePiece4.setX(50); whitePiece4.setY(50); pane.getChildren().add(whitePiece4);
+    	ImageView whitePiece5 = new ImageView("/white_transparent.png");
+    	whitePiece5.setFitHeight(35); whitePiece5.setFitWidth(35); whitePiece5.setX(50); whitePiece5.setY(50); pane.getChildren().add(whitePiece5);
+    	ImageView whitePiece6 = new ImageView("/white_transparent.png");
+    	whitePiece6.setFitHeight(35); whitePiece6.setFitWidth(35); whitePiece6.setX(50); whitePiece6.setY(50); pane.getChildren().add(whitePiece6);
+    	ImageView whitePiece7 = new ImageView("/white_transparent.png");
+    	whitePiece7.setFitHeight(35); whitePiece7.setFitWidth(35); whitePiece7.setX(50); whitePiece7.setY(50); pane.getChildren().add(whitePiece7);
+    	ImageView whitePiece8 = new ImageView("/white_transparent.png");
+    	whitePiece8.setFitHeight(35); whitePiece8.setFitWidth(35); whitePiece8.setX(50); whitePiece8.setY(50); pane.getChildren().add(whitePiece8);
+    	ImageView whitePiece9 = new ImageView("/white_transparent.png");
+    	whitePiece9.setFitHeight(35); whitePiece9.setFitWidth(35); whitePiece9.setX(50); whitePiece9.setY(50); pane.getChildren().add(whitePiece9);
+    	
+    	ImageView blackPiece1 = new ImageView("/black_transparent.png");
+    	blackPiece1.setFitHeight(35); blackPiece1.setFitWidth(35); blackPiece1.setX(825); blackPiece1.setY(50); pane.getChildren().add(blackPiece1);
+    	ImageView blackPiece2 = new ImageView("/black_transparent.png");
+    	blackPiece2.setFitHeight(35); blackPiece2.setFitWidth(35); blackPiece2.setX(825); blackPiece2.setY(50); pane.getChildren().add(blackPiece2);
+    	ImageView blackPiece3 = new ImageView("/black_transparent.png");
+    	blackPiece3.setFitHeight(35); blackPiece3.setFitWidth(35); blackPiece3.setX(825); blackPiece3.setY(50); pane.getChildren().add(blackPiece3);
+    	ImageView blackPiece4 = new ImageView("/black_transparent.png");
+    	blackPiece4.setFitHeight(35); blackPiece4.setFitWidth(35); blackPiece4.setX(825); blackPiece4.setY(50); pane.getChildren().add(blackPiece4);
+    	ImageView blackPiece5 = new ImageView("/black_transparent.png");
+    	blackPiece5.setFitHeight(35); blackPiece5.setFitWidth(35); blackPiece5.setX(825); blackPiece5.setY(50); pane.getChildren().add(blackPiece5);
+    	ImageView blackPiece6 = new ImageView("/black_transparent.png");
+    	blackPiece6.setFitHeight(35); blackPiece6.setFitWidth(35); blackPiece6.setX(825); blackPiece6.setY(50); pane.getChildren().add(blackPiece6);
+    	ImageView blackPiece7 = new ImageView("/black_transparent.png");
+    	blackPiece7.setFitHeight(35); blackPiece7.setFitWidth(35); blackPiece7.setX(825); blackPiece7.setY(50); pane.getChildren().add(blackPiece7);
+    	ImageView blackPiece8 = new ImageView("/black_transparent.png");
+    	blackPiece8.setFitHeight(35); blackPiece8.setFitWidth(35); blackPiece8.setX(825); blackPiece8.setY(50); pane.getChildren().add(blackPiece8);
+    	ImageView blackPiece9 = new ImageView("/black_transparent.png");
+    	blackPiece9.setFitHeight(35); blackPiece9.setFitWidth(35); blackPiece9.setX(825); blackPiece9.setY(50); pane.getChildren().add(blackPiece9);
+    	
+    	
     	
     	// Here we make the white piece an interact-able object in the GUI
-    	sourceMV.setOnDragDetected(new EventHandler<MouseEvent>() {
+    	whitePiece1.setOnDragDetected(new EventHandler<MouseEvent>() {
 		    public void handle(MouseEvent event) {
 		        /* drag was detected, start a drag-and-drop gesture*/
 		        /* allow any transfer mode */
-		        Dragboard db = sourceMV.startDragAndDrop(TransferMode.ANY);
+		        Dragboard db = whitePiece1.startDragAndDrop(TransferMode.ANY);
 		        
 		        /* Put a string on a dragboard */
 		        ClipboardContent content = new ClipboardContent();
-		        content.putImage(sourceMV.getImage());
+		        content.putImage(whitePiece1.getImage());
 		        db.setContent(content);
 		        
 		        event.consume();
 		    }
 		});
     	
-    	sourceMV.setOnDragDone(new EventHandler<DragEvent>() {
+    	whitePiece1.setOnDragDone(new EventHandler<DragEvent>() {
 		    public void handle(DragEvent event) {
 		        /* the drag and drop gesture ended */
 		        /* if the data was successfully moved, clear it */
 		        if (event.getTransferMode() == TransferMode.MOVE) {
-		            sourceMV.setImage(null);
+		            whitePiece1.setImage(null);
 		        }
 		        event.consume();
 		    }
 		});
+    	
+    	// Here we make the white piece an interact-able object in the GUI
+    	whitePiece1.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece1.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece1.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece1.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece1.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});
+
+    	whitePiece2.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece2.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece2.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece2.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece2.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});
+
+    	whitePiece3.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece3.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece3.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece3.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece3.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece4.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece4.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece4.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece4.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece4.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece5.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece5.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece5.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece5.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece5.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+    	
+    	whitePiece6.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece6.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece6.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece6.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece6.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+
+    	whitePiece7.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece7.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece7.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece7.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece7.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+    	
+    	whitePiece8.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece8.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece8.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece8.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece8.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+    	
+    	whitePiece9.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = whitePiece9.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(whitePiece9.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	whitePiece9.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            whitePiece9.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+    	
+    	// Here we make the white piece an interact-able object in the GUI
+    	blackPiece1.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece1.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece1.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece1.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece1.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});
+
+    	blackPiece2.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece2.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece2.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece2.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece2.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});
+
+    	blackPiece3.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece3.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece3.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece3.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece3.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece4.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece4.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece4.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece4.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece4.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece5.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece5.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece5.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece5.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece5.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+    	
+    	blackPiece6.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece6.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece6.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece6.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece6.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+
+    	blackPiece7.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece7.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece7.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece7.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece7.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+    	
+    	blackPiece8.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece8.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece8.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece8.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece8.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+    	
+    	blackPiece9.setOnDragDetected(new EventHandler<MouseEvent>() {
+		    public void handle(MouseEvent event) {
+		        /* drag was detected, start a drag-and-drop gesture*/
+		        /* allow any transfer mode */
+		        Dragboard db = blackPiece9.startDragAndDrop(TransferMode.ANY);
+		        
+		        /* Put a string on a dragboard */
+		        ClipboardContent content = new ClipboardContent();
+		        content.putImage(blackPiece9.getImage());
+		        db.setContent(content);
+		        
+		        event.consume();
+		    }
+		});
+    	
+    	blackPiece9.setOnDragDone(new EventHandler<DragEvent>() {
+		    public void handle(DragEvent event) {
+		        /* the drag and drop gesture ended */
+		        /* if the data was successfully moved, clear it */
+		        if (event.getTransferMode() == TransferMode.MOVE) {
+		            blackPiece9.setImage(null);
+		        }
+		        event.consume();
+		    }
+		});    	
+    	
     	
     	// Here is where we make target destinations for our click and drag 
     	final Image target17 = new Image("target.PNG");
@@ -1529,5 +2032,4 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
