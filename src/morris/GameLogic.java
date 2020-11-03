@@ -9,51 +9,53 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 public class GameLogic {
+	enum Color {white, black}
 
 	GameLogic(){ // constructor for game logic class
-		String color = "black";
+		
 		Board board = new Board(9);
 		
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("red = " + board.getNumPieces("red"));
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 0, 11);
 		phaseOne("black", "white", board, 0, 77);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 0, 14);
 		phaseOne("black", "white", board, 0, 71);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 71, 17);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("black", "white", board, 0, 71);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 0, 22);
 		phaseOne("black", "white", board, 22, 74);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 0, 22);
 		phaseOne("black", "white", board, 0, 66);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 0, 42);
 		phaseOne("black", "white", board, 0, 62);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 0, 34);
 		phaseOne("black", "white", board, 0, 54);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 0, 26);
 		phaseOne("black", "white", board, 0, 31);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		phaseOne("white", "black", board, 0, 45);
 		phaseOne("black", "white", board, 0, 33);
-		System.out.println("white = " + board.whitePieces);
-		System.out.println("black = " + board.blackPieces);
+		System.out.println("white = " + board.getPieces("white"));
+		System.out.println("black = " + board.getPieces("black"));
 		
 		
 		
@@ -112,14 +114,14 @@ public class GameLogic {
 		}
 		else if (color == "white") { // checking to make sure white has valid moves
 			System.out.println("Calling availableMoves " + color);
-			if (availableMoves(color, board.whitePieces, board.blackPieces, board.spaces)) {
+			if (availableMoves(color, board.getPieces("white"), board.getPieces("black"), board.getSpaces())) {
 				System.out.print(color + " has lost!");
 				return true;
 			}
 		}
 		else if (color == "black") { // checking to make sure black has valid moves
 			System.out.println("Calling availableMoves " + color);
-			if (availableMoves(color, board.blackPieces, board.whitePieces, board.spaces)) {
+			if (availableMoves(color, board.getPieces("black"), board.getPieces("white"), board.getSpaces())) {
 				System.out.print(color + " has lost!");
 				return true;
 			}
