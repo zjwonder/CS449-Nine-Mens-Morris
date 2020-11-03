@@ -1,3 +1,5 @@
+package morris;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +15,7 @@ public class Board {
 	List<int[]> mills = new ArrayList<int[]>();
 	
 	Board(int numPieces){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
-		Test_Cases.setBoardExists(true);
+		TestCases.setBoardExists(true);
 		readSpaces();
 		
 		for (int i = 0; i < numPieces; i++) {
@@ -99,17 +101,17 @@ public class Board {
 	public void movePiece(String color, int oldSpace, int newSpace) {
 		if (blackPieces.contains(newSpace) || whitePieces.contains(newSpace) || !spaces.get(oldSpace).contains(newSpace)) { 
 			//makes sure neither player has the desired space and makes sure the new space is a valid movement from the old space
-			Test_Cases.setMoveCheckStatus(true);
+			TestCases.setMoveCheckStatus(true);
 			System.out.println("Not a valid move!");
 		}
 		else if (color == "white") {
 			
-			Test_Cases.setMoveCheckStatus(true);
+			TestCases.setMoveCheckStatus(true);
 			whitePieces.set(whitePieces.indexOf(oldSpace), newSpace);
 			System.out.println("movePiece worked!");
 		}
 		else if (color == "black") {
-			Test_Cases.setMoveCheckStatus(true);
+			TestCases.setMoveCheckStatus(true);
 			blackPieces.set(blackPieces.indexOf(oldSpace), newSpace);
 			System.out.println("movePiece worked!");
 		}

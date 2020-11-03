@@ -1,6 +1,7 @@
+package morris;
 import java.util.*;
 
-public class Nine_Mens_Morris {
+public class NineMensMorris {
 
 	public static void main(String[] args) {
 		
@@ -9,12 +10,18 @@ public class Nine_Mens_Morris {
 		String pw_attempt = user_input.nextLine();
 		
 		if (pw_attempt.equals("test")) { // enter correct code to initialize automated testing
-			Test_Cases test_obj = new Test_Cases();
+			TestCases test_obj = new TestCases();
 			test_obj.initializer();
 		}
 		
 		else {
-		Game_Logic gameTest = new Game_Logic();
+		
+		// TODO Auto-generated method stub
+		GameLogic gameTest = new GameLogic();
+		/*Board test = new Board(9);
+		System.out.println(test.spaces);
+		System.out.println(test.mills.get(5)[2]);
+		System.out.print(test.whitePieces);*/
 		}
 	}
 }

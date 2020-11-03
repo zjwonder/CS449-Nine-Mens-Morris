@@ -1,3 +1,5 @@
+package morris;
+
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -6,9 +8,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class Game_Logic {
+public class GameLogic {
 
-	Game_Logic(){ // constructor for game logic class
+	GameLogic(){ // constructor for game logic class
 		String color = "black";
 		Board board = new Board(9);
 		
@@ -156,30 +158,3 @@ public class Game_Logic {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
