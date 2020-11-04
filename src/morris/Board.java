@@ -15,8 +15,7 @@ public class Board {
 	private List<int[]> mills = new ArrayList<int[]>();
 	private enum eColor {white, black, invalid}; // added enums for each player to make the code a bit cleaner
 	
-	Board(int numPieces){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
-		TestCases.setBoardExists(true);
+	public Board(int numPieces){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
 		readSpaces();
 		
 		for (int i = 0; i < numPieces; i++) {
@@ -85,51 +84,72 @@ public class Board {
 	
 	public List<Integer> getPieces(String playerColor) {
 		switch(convertToEnum(playerColor)) {
-		case white: {
-			return this.whitePieces;
+			case white: {
+				return this.whitePieces;
+				}
+			case black: {
+				return this.blackPieces;
+				}
+			default:{
+				return null;
 			}
-		case black: {
-			return this.blackPieces;
-			}
-		default:{
-			return null;
 		}
+	}
+	
+	public int getLocation(String playerColor, int index) { // returns location of the piece at given index
+		switch (convertToEnum(playerColor)) {
+			case white: {
+				return whitePieces.get(index);
+			}
+			case black: {
+				return blackPieces.get(index);
+			}
+			default: {
+				return -1;
+			}
 		}
 	}
 	
 	// method to help test current functions by plugging in location values
-	public void placePiece(String playerColor, int space) { // places the given piece at the given spot for the given player.
+	
+	public int findIndex(int[] array, int key) {
+		for(int i = 0; i < array.length; i++) {
+			if (array[i] == key) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public void placePiece(String playerColor, int index, int space) { // places the given piece at the given spot for the given player.
 		switch (convertToEnum(playerColor)) {
-		case white: {
-			whitePieces.set(whitePieces.indexOf(0), space);
-			break;
-		}
-		case black: {
-			blackPieces.set(blackPieces.indexOf(0), space);
-			break;
-		}
-		default: {
-			break;
-		}
+			case white: {
+				whitePieces.set(whitePieces.indexOf(index), space);
+				break;
+			}
+			case black: {
+				blackPieces.set(blackPieces.indexOf(index), space);
+				break;
+			}
+			default: {
+				break;
+			}
 		}
 	}
 	
 	public void movePiece(String playerColor, int oldSpace, int newSpace) {
 		if (blackPieces.contains(newSpace) || whitePieces.contains(newSpace) || !spaces.get(oldSpace).contains(newSpace)) { 
 			//makes sure neither player has the desired space and makes sure the new space is a valid movement from the old space
-			TestCases.setMoveCheckStatus(true);
 			System.out.println("Not a valid move!");
 		}
 		else {
 			switch (convertToEnum(playerColor)) {
 			case white: {
-			TestCases.setMoveCheckStatus(true);
 			whitePieces.set(whitePieces.indexOf(oldSpace), newSpace);
 			System.out.println("movePiece worked!");
 			break;
 			}
 			case black: {
-			TestCases.setMoveCheckStatus(true);
 			blackPieces.set(blackPieces.indexOf(oldSpace), newSpace);
 			System.out.println("movePiece worked!");
 			break;
@@ -198,7 +218,7 @@ public class Board {
 		return false;
 	}
 	
-	public void readSpaces() {
+	public boolean readSpaces() {
 		// Reads a text file with all the valid spaces and their valid connections. This should also make different versions easier to implement.
 		try (Scanner scanner = new Scanner(new File("src\\9MM Spaces.txt"))) {
 			int tempKey;
@@ -232,8 +252,10 @@ public class Board {
 			
 			}
 		scanner.close();
+		return true;
 		} catch (Exception e) {
 			System.err.println("something broke");
+			return false;
 		}
 	}
 }
