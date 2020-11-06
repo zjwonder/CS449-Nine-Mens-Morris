@@ -66,15 +66,15 @@ public class Board {
 	
 	public int getNumPieces(String playerColor){ // getter for finding the number of pieces a player has
 		switch (convertToEnum(playerColor)) {
-		case white: {
-			return whitePieces.size();
-		}
-		case black: {
-			return blackPieces.size();
-		}
-		default: {
-			return 0;
-		}
+			case white: {
+				return whitePieces.size();
+			}
+			case black: {
+				return blackPieces.size();
+			}
+			default: {
+				return 0;
+			}
 		}
 	}
 	
@@ -121,45 +121,57 @@ public class Board {
 		return -1;
 	}
 	
-	public void placePiece(String playerColor, int index, int space) { // places the given piece at the given spot for the given player.
-		switch (convertToEnum(playerColor)) {
-			case white: {
-				whitePieces.set(whitePieces.indexOf(index), space);
-				break;
-			}
-			case black: {
-				blackPieces.set(blackPieces.indexOf(index), space);
-				break;
-			}
-			default: {
-				break;
+	public boolean placePiece(String playerColor, int pieceIndex, int space) {
+		// place pieces not yet on the board for specified player
+		// return false if placement fails
+		if (spaces.get(space) == null || pieceIndex >= blackPieces.size()) {
+			System.out.println("Invalid index or location.");
+			return false;
+		}
+		else {
+			switch (convertToEnum(playerColor)) {
+				case white: {
+					whitePieces.set(pieceIndex, space);
+					System.out.println("placePiece worked!");
+					return true;
+				}
+				case black: {
+					blackPieces.set(pieceIndex, space);
+					System.out.println("placePiece worked!");
+					return true;
+				}
+				default: {
+					System.out.println("Invalid color input.");
+					return false;
+				}
 			}
 		}
 	}
 	
-	public void movePiece(String playerColor, int oldSpace, int newSpace) {
+	public boolean movePiece(String playerColor, int oldSpace, int newSpace) { // relocate piece
 		if (blackPieces.contains(newSpace) || whitePieces.contains(newSpace) || !spaces.get(oldSpace).contains(newSpace)) { 
-			//makes sure neither player has the desired space and makes sure the new space is a valid movement from the old space
-			System.out.println("Not a valid move!");
+			//make sure neither player has the desired space and new space is a valid movement from old space
+			System.out.println("Not a valid move.");
+			return false;
 		}
 		else {
 			switch (convertToEnum(playerColor)) {
-			case white: {
-			whitePieces.set(whitePieces.indexOf(oldSpace), newSpace);
-			System.out.println("movePiece worked!");
-			break;
+				case white: {
+					whitePieces.set(whitePieces.indexOf(oldSpace), newSpace);
+					System.out.println("movePiece worked!");
+					break;
+				}
+				case black: {
+					blackPieces.set(blackPieces.indexOf(oldSpace), newSpace);
+					System.out.println("movePiece worked!");
+					break;
+				}
+				default: {
+					System.out.println("Invalid color input.");
+					return false;
+				}
 			}
-			case black: {
-			blackPieces.set(blackPieces.indexOf(oldSpace), newSpace);
-			System.out.println("movePiece worked!");
-			break;
-			}
-			default: {
-				System.out.println("movePiece didn't work :(");
-				break;
-			}
-		
-			}
+			return true;
 		}
 	}
 	
