@@ -14,7 +14,6 @@ public class Target extends GUI implements EventHandler<ActionEvent> {
 	/*************variables********************************************************/
 	ImageView targetImg;
 	Pair<Integer, Integer> targetCoords;
-	Pair<Integer, Integer> tempCoords;
 	int targetLoc;
 	// String color;    necessary?
 	
@@ -47,6 +46,10 @@ public class Target extends GUI implements EventHandler<ActionEvent> {
 	public int getY() {
 		return targetCoords.getValue();
 	}
+	
+	public Pair<Integer, Integer> getCoords() {
+		return targetCoords;
+	}
 		
 	// returns board location value stored in targetLoc variable
 	public int getTargetLoc() {
@@ -61,20 +64,7 @@ public class Target extends GUI implements EventHandler<ActionEvent> {
 		
 	// function gives drag & drop properties to targetImg variable
 	public void makeTarget() {
-		targetImg.setOnDragOver(new EventHandler<DragEvent>() {
-    	    public void handle(DragEvent event) {
-    	        /* data is dragged over the target */
-    	        /* accept it only if it is not dragged from the same node 
-    	         * and if it has a string data */
-    	        if (event.getGestureSource() != targetImg &&
-    	                event.getDragboard().hasImage()) {
-    	            /* allow for both copying and moving, whatever user chooses */
-    	            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-    	        }
-    	        event.consume();
-    	    }
-    	});
-    			
+				
 		targetImg.setOnDragEntered(new EventHandler<DragEvent>() {
     	    public void handle(DragEvent event) {
     	    /* the drag-and-drop gesture entered the target */
@@ -85,15 +75,7 @@ public class Target extends GUI implements EventHandler<ActionEvent> {
     	         }  
     	         event.consume();
     	    }
-    	});
-    			
-		targetImg.setOnDragExited(new EventHandler<DragEvent>() {
-    	    public void handle(DragEvent event) {
-    	        /* mouse moved away, remove the graphical cues */
-    	    	event.consume();
-    	    }
-    	});
-    		
+    	});    		
 		
 		targetImg.setOnDragDropped(new EventHandler<DragEvent>() {
     	    public void handle(DragEvent event) {
@@ -106,12 +88,35 @@ public class Target extends GUI implements EventHandler<ActionEvent> {
     	        	success = true;
     	        }
     	        targetImg.setDisable(true);
-    	        /* let the source know whether the string was successfully 
+    	        /* let the source know whether the image was successfully 
     	         * transferred and used */
     	        event.setDropCompleted(success);
     	        event.consume();
     	    } 	    
     	});	
+		
+		targetImg.setOnDragOver(new EventHandler<DragEvent>() {
+    	    public void handle(DragEvent event) {
+    	        /* data is dragged over the target */
+    	        /* accept it only if it is not dragged from the same node 
+    	         * and if it has an image data */
+    	        if (event.getGestureSource() != targetImg &&
+    	                event.getDragboard().hasImage()) {
+    	            /* allow for both copying and moving, whatever user chooses */
+    	            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+    	        }
+    	        event.consume();
+    	        //System.out.println("Actual X = " + event.getX() + "\nActual Y = " + event.getY());
+    	    }
+    	});
+		
+//		targetImg.setOnDragExited(new EventHandler<DragEvent>() {
+//	    public void handle(DragEvent event) {
+//	        /* mouse moved away, remove the graphical cues */
+//	    		event.consume();
+//	    		
+//	    	}
+//		});
 	}
 		
 		

@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.DragEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -30,6 +31,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	ArrayList<Piece> whitePieces = new ArrayList<Piece>();
 	// list of all black player pieces
 	ArrayList<Piece> blackPieces = new ArrayList<Piece>();
+
+	// temporary variable for setLocation function
+	Pair<Integer, Integer> tempCoords;
 	
 	// display pane that all objects must go onto
 	Pane pane = new Pane();
@@ -124,9 +128,44 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     		target.makeTarget();
     		targets.add(target);
     		pane.getChildren().add(target.targetImg);
+    		
+    		setLocation();
     	}
 	}
 	
+	// function for assigning GUI coordinates to the appropriate piece
+	public void setLocation() {
+		for (int i = 0; i < targets.size(); i++) {
+			Target tempTarget = targets.get(i);
+			targets.get(i).targetImg.setOnDragExited(new EventHandler<DragEvent>() {
+				public void handle(DragEvent arg0) {
+					tempCoords = new Pair<Integer, Integer>(tempTarget.getX(), tempTarget.getY());
+					System.out.println("setLocation X = " + tempTarget.getX() + "\nsetLocation Y = " + tempTarget.getY());
+				}
+			});
+		}
+		
+		for (int i = 0; i < blackPieces.size(); i++) {
+			int temp = i;
+			blackPieces.get(i).pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
+				public void handle(DragEvent arg0) {
+					System.out.println("tempCoords = " + tempCoords + "\n\n");
+					blackPieces.get(temp).setCoords(tempCoords);
+					blackPieces.get(temp).setPieceLoc(findLoc(tempCoords));
+				}
+			});
+			
+			whitePieces.get(i).pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
+				public void handle(DragEvent arg0) {
+					System.out.println("tempCoords = " + tempCoords + "\n\n");
+					whitePieces.get(temp).setCoords(tempCoords);
+					whitePieces.get(temp).setPieceLoc(findLoc(tempCoords));
+				}
+			});
+		}
+	}
+	
+	// function that takes in a coordinate pair and returns the associated board location
 	public int findLoc(Pair<Integer, Integer> coords) {
 		System.out.println("coords = " + coords);
 		System.out.println("reverseInfo.containsKey(coords) = " + reverseInfo.containsKey(coords) + "\n");
@@ -137,8 +176,6 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 			return -2;
 	}
 
-	
-	
 	// function takes in target location info from spaces.txt and stores them in HashMap targetInfo
 	public void readSpaces() {
 		try {

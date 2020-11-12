@@ -68,8 +68,8 @@ public class Piece extends GUI implements EventHandler<ActionEvent> {
 	}
 	
 	// sets value of coordinates variable
-	public void setBoardLoc() {
-		
+	public void setCoords(Pair<Integer, Integer> location) {
+		coordinates = location;
 	}
 	
 	/*********************misc functions*******************************************/
@@ -95,11 +95,10 @@ public class Piece extends GUI implements EventHandler<ActionEvent> {
 	        public void handle(DragEvent event) {
 	            /* the drag and drop gesture ended */
 	            /* if the data was successfully moved, clear it */
-	            if (event.getTransferMode() == TransferMode.MOVE) {
+	        	if (event.getTransferMode() == TransferMode.MOVE) {
 	                pieceImg.setImage(null);
 	            }
 	            event.consume();
-
 	        }
 	    });
 	}
