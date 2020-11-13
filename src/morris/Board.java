@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 public class Board {
@@ -132,12 +131,12 @@ public class Board {
 			switch (convertToEnum(playerColor)) {
 				case white: {
 					whitePieces.set(pieceIndex, space);
-					System.out.println("placePiece worked!");
+					System.out.println("white placePiece worked!");
 					return true;
 				}
 				case black: {
 					blackPieces.set(pieceIndex, space);
-					System.out.println("placePiece worked!");
+					System.out.println("black placePiece worked!");
 					return true;
 				}
 				default: {
@@ -190,35 +189,38 @@ public class Board {
     }
 	
 	public boolean checkMill(String playerColor, Integer newSpace) {
-		List<Integer> tempPieces = new ArrayList<Integer>();
-		
-		switch (convertToEnum(playerColor)) {
-		case white: {
-			tempPieces = whitePieces;
-			break;
-			}
-		
-		case black: {
-			tempPieces = blackPieces;
-			break;
-			}
-		
-		default: return false;
-		}
-		
-		for (int i = 0; i < mills.size(); i++) {
-			int[] tempMill = mills.get(i);
-			if (search(tempMill, newSpace)) {
-				for (int j = 0; j < 3; j++) {
-					if (!tempPieces.contains(tempMill[j])) {
-						return false;
-					}
-				}
-				return true;
-			}
-		}
-		return false;
-	}
+        List<Integer> tempPieces = new ArrayList<Integer>();
+        
+        switch (convertToEnum(playerColor)) {
+        case white: {
+            tempPieces = whitePieces;
+            break;
+            }
+        
+        case black: {
+            tempPieces = blackPieces;
+            break;
+            }
+        
+        default: return false;
+        }
+        
+        for (int i = 0; i < mills.size(); i++) {
+            int count = 0;
+            int[] tempMill = mills.get(i);
+            if (search(tempMill, newSpace)) {
+                for (int j = 0; j < 3; j++) {
+                    if (tempPieces.contains(tempMill[j])) {
+                        count++;
+                    }
+                if (count == 3) {
+                    return true;
+                }
+                }
+            }
+        }
+        return false;
+    }
 	
 	
 	public boolean search(int[] array, int key) {

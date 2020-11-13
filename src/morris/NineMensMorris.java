@@ -1,5 +1,6 @@
 package morris;
-import java.util.*;
+
+import GUI.GUI;
 
 public class NineMensMorris {
 
@@ -7,6 +8,8 @@ public class NineMensMorris {
 		
 		// TODO Auto-generated method stub
 		GameLogic gameTest = new GameLogic();
+		GUI GUI = new GUI();
+		Board board = new Board(9);
 		/*Board test = new Board(9);
 		System.out.println(test.spaces);
 		System.out.println(test.mills.get(5)[2]);

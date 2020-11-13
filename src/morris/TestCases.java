@@ -66,7 +66,7 @@ public class TestCases {
 		String color = "black";
 		int index = 0;
 		int space = 77;
-		board.placePiece(color, space);
+		board.placePiece(color, index, space);
 		
 		return "failed";
 	}

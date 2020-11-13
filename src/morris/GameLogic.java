@@ -1,66 +1,59 @@
 package morris;
 
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 
 public class GameLogic {
 	enum Color {white, black}
 
-	GameLogic(){ // constructor for game logic class
+	public GameLogic(){ // constructor for game logic class
 		
-		Board board = new Board(9);
-		
-		System.out.println("red = " + board.getNumPieces("red"));
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 0, 11, 0);
-		phaseOne("black", "white", board, 0, 77, 0);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 0, 14, 1);
-		phaseOne("black", "white", board, 0, 71, 1);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 71, 17, 2);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("black", "white", board, 0, 71, 2);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 0, 22, 3);
-		phaseOne("black", "white", board, 22, 74, 3);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 0, 22, 4);
-		phaseOne("black", "white", board, 0, 66, 4);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 0, 42, 5);
-		phaseOne("black", "white", board, 0, 62, 5);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 0, 34, 6);
-		phaseOne("black", "white", board, 0, 54, 6);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 0, 26, 7);
-		phaseOne("black", "white", board, 0, 31, 7);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
-		phaseOne("white", "black", board, 0, 45, 7);
-		phaseOne("black", "white", board, 0, 33, 7);
-		System.out.println("white = " + board.getPieces("white"));
-		System.out.println("black = " + board.getPieces("black"));
+
 		
 		
-		
-		
-		
+//		System.out.println("red = " + board.getNumPieces("red"));
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 0, 11, 0);
+//		phaseOne("black", "white", board, 0, 77, 0);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 0, 14, 1);
+//		phaseOne("black", "white", board, 0, 71, 1);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 71, 17, 2);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("black", "white", board, 0, 71, 2);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 0, 22, 3);
+//		phaseOne("black", "white", board, 22, 74, 3);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 0, 22, 4);
+//		phaseOne("black", "white", board, 0, 66, 4);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 0, 42, 5);
+//		phaseOne("black", "white", board, 0, 62, 5);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 0, 34, 6);
+//		phaseOne("black", "white", board, 0, 54, 6);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 0, 26, 7);
+//		phaseOne("black", "white", board, 0, 31, 7);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
+//		phaseOne("white", "black", board, 0, 45, 7);
+//		phaseOne("black", "white", board, 0, 33, 7);
+//		System.out.println("white = " + board.getPieces("white"));
+//		System.out.println("black = " + board.getPieces("black"));
 		
 		
 		//winCondition("white", board);
