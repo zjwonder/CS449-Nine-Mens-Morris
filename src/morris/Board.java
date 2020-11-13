@@ -4,18 +4,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 public class Board {
 	
-	HashMap<Integer, List<Integer>> spaces = new HashMap<Integer, List<Integer>>(); // This is essentially a dynamic array of maps. With a given spot being the key and the spots it's connected to being values.
-	List<Integer> whitePieces = new ArrayList<Integer>(); // These are arraylists (dynamic arrays) that keep track of player pieces. 
-	List<Integer> blackPieces = new ArrayList<Integer>(); // All pieces start with value 0, are updated to the value of the spot where they're placed, and are deleted when a piece is removed from the board.
-	List<int[]> mills = new ArrayList<int[]>();
+	private HashMap<Integer, List<Integer>> spaces = new HashMap<Integer, List<Integer>>(); // This is essentially a dynamic array of maps. With a given spot being the key and the spots it's connected to being values.
+	private List<Integer> whitePieces = new ArrayList<Integer>(); // These are arraylists (dynamic arrays) that keep track of player pieces. 
+	private List<Integer> blackPieces = new ArrayList<Integer>(); // All pieces start with value 0, are updated to the value of the spot where they're placed, and are deleted when a piece is removed from the board.
+	private List<int[]> mills = new ArrayList<int[]>();
+	private enum eColor {white, black, invalid}; // added enums for each player to make the code a bit cleaner
 	
-	Board(int numPieces){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
-		TestCases.setBoardExists(true);
+	public Board(int numPieces){ // This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
 		readSpaces();
 		
 		for (int i = 0; i < numPieces; i++) {
@@ -55,106 +54,174 @@ public class Board {
 		System.out.println(blackPieces);*/
 	}
 	
-	public int getNumPieces(String color){ // getter for finding the number of pieces a player has
-		if (color == "white") {
-			return whitePieces.size(); 
+	
+	public eColor convertToEnum(String input) { // converts valid string inputs into the appropriate enum
+		eColor output;
+		if (input == "white") output = eColor.white;
+		else if (input == "black") output = eColor.black;
+		else output = eColor.invalid;
+		return output;
+	}
+	
+	public int getNumPieces(String playerColor){ // getter for finding the number of pieces a player has
+		switch (convertToEnum(playerColor)) {
+			case white: {
+				return whitePieces.size();
+			}
+			case black: {
+				return blackPieces.size();
+			}
+			default: {
+				return 0;
+			}
 		}
-		else if (color == "black") {
-			return blackPieces.size();
+	}
+	
+	public HashMap<Integer, List<Integer>> getSpaces() { 
+		return this.spaces;
+	}
+	
+	public List<Integer> getPieces(String playerColor) {
+		switch(convertToEnum(playerColor)) {
+			case white: {
+				return this.whitePieces;
+				}
+			case black: {
+				return this.blackPieces;
+				}
+			default:{
+				return null;
+			}
 		}
-		else {
-			System.out.print("error"); // extraneous else to tell if something went wrong
-			return 0;
+	}
+	
+	public int getLocation(String playerColor, int index) { // returns location of the piece at given index
+		switch (convertToEnum(playerColor)) {
+			case white: {
+				return whitePieces.get(index);
+			}
+			case black: {
+				return blackPieces.get(index);
+			}
+			default: {
+				return -1;
+			}
 		}
 	}
 	
 	// method to help test current functions by plugging in location values
-	public void placePiece(String color, int space) { // places the given piece at the given spot for the given player.
-		if (color == "white") {
-			whitePieces.set(whitePieces.indexOf(0), space);
+	
+	public int findIndex(int[] array, int key) {
+		for(int i = 0; i < array.length; i++) {
+			if (array[i] == key) {
+				return i;
+			}
 		}
-		if (color == "black") {
-			blackPieces.set(blackPieces.indexOf(0), space);
-		}
-		/*System.out.print(whitePieces + "\n");
-		whitePieces.set(0, 11);
-		whitePieces.set(1, 24);
-		whitePieces.set(2, 17);
-		whitePieces.set(3, 26);
-		whitePieces.set(4, 33);
-		whitePieces.set(5, 45);
-		whitePieces.set(6, 54);
-		whitePieces.set(7, 42);
-		whitePieces.set(8, 77); 
-		blackPieces.set(0, 47);
-		blackPieces.set(1, 47);
-		blackPieces.set(2, 47);
-		blackPieces.set(3, 47);
-		blackPieces.set(4, 47);
-		blackPieces.set(5, 47);
-		blackPieces.set(6, 47);
-		blackPieces.set(7, 47);
-		blackPieces.set(8, 47);*/
-		
+		return -1;
 	}
 	
-	public void movePiece(String color, int oldSpace, int newSpace) {
+	public boolean placePiece(String playerColor, int pieceIndex, int space) {
+		// place pieces not yet on the board for specified player
+		// return false if placement fails
+		if (spaces.get(space) == null || pieceIndex >= blackPieces.size()) {
+			System.out.println("Invalid index or location.");
+			return false;
+		}
+		else {
+			switch (convertToEnum(playerColor)) {
+				case white: {
+					whitePieces.set(pieceIndex, space);
+					//System.out.println("white placePiece worked!");
+					return true;
+				}
+				case black: {
+					blackPieces.set(pieceIndex, space);
+					//System.out.println("black placePiece worked!");
+					return true;
+				}
+				default: {
+					System.out.println("Invalid color input.");
+					return false;
+				}
+			}
+		}
+	}
+	
+	public boolean movePiece(String playerColor, int oldSpace, int newSpace) { // relocate piece
 		if (blackPieces.contains(newSpace) || whitePieces.contains(newSpace) || !spaces.get(oldSpace).contains(newSpace)) { 
-			//makes sure neither player has the desired space and makes sure the new space is a valid movement from the old space
-			TestCases.setMoveCheckStatus(true);
-			System.out.println("Not a valid move!");
+			//make sure neither player has the desired space and new space is a valid movement from old space
+			System.out.println("Not a valid move.");
+			return false;
 		}
-		else if (color == "white") {
-			
-			TestCases.setMoveCheckStatus(true);
-			whitePieces.set(whitePieces.indexOf(oldSpace), newSpace);
-			System.out.println("movePiece worked!");
-		}
-		else if (color == "black") {
-			TestCases.setMoveCheckStatus(true);
-			blackPieces.set(blackPieces.indexOf(oldSpace), newSpace);
-			System.out.println("movePiece worked!");
+		else {
+			switch (convertToEnum(playerColor)) {
+				case white: {
+					whitePieces.set(whitePieces.indexOf(oldSpace), newSpace);
+					System.out.println("movePiece worked!");
+					break;
+				}
+				case black: {
+					blackPieces.set(blackPieces.indexOf(oldSpace), newSpace);
+					System.out.println("movePiece worked!");
+					break;
+				}
+				default: {
+					System.out.println("Invalid color input.");
+					return false;
+				}
+			}
+			return true;
 		}
 	}
 	
-	public void removePiece(String color, int piece) {
-        if (color == "white") {
+	public void removePiece(String playerColor, int piece) {
+		switch (convertToEnum(playerColor)) {
+		case white: {
             whitePieces.remove(whitePieces.indexOf(piece));
+            break;
         }
-        if (color == "black") {
+		case black: {
             blackPieces.remove(blackPieces.indexOf(piece));
+            break;
         }
+		default: break;
+	}
     }
 	
-	public boolean checkMill(String color, Integer newSpace) {
-		if (color == "white") {
-			for (int i = 0; i < mills.size(); i++) {
-				int[] tempMill = mills.get(i);
-				if (search(tempMill, newSpace)) {
-					for (int j = 0; j < 3; j++) {
-						if (!whitePieces.contains(tempMill[j])) {
-							return false;
-						}
-					}
-					return true;
-				}
-			}
-		}
-		else if (color.equals("black")) {
-			for (int i = 0; i < mills.size(); i++) {
-				int[] tempMill = mills.get(i);
-				if (search(tempMill, newSpace)) {
-					for (int j = 0; j < 3; j++) {
-						if (!blackPieces.contains(tempMill[j])) {
-							return false;
-						}
-					}
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+	public boolean checkMill(String playerColor, Integer newSpace) {
+        List<Integer> tempPieces = new ArrayList<Integer>();
+        
+        switch (convertToEnum(playerColor)) {
+        case white: {
+            tempPieces = whitePieces;
+            break;
+            }
+        
+        case black: {
+            tempPieces = blackPieces;
+            break;
+            }
+        
+        default: return false;
+        }
+        
+        for (int i = 0; i < mills.size(); i++) {
+            int count = 0;
+            int[] tempMill = mills.get(i);
+            if (search(tempMill, newSpace)) {
+                for (int j = 0; j < 3; j++) {
+                    if (tempPieces.contains(tempMill[j])) {
+                        count++;
+                    }
+                if (count == 3) {
+                    return true;
+                }
+                }
+            }
+        }
+        return false;
+    }
+	
 	
 	public boolean search(int[] array, int key) {
 		for(int i = 0; i < array.length; i++) {
@@ -165,7 +232,7 @@ public class Board {
 		return false;
 	}
 	
-	public void readSpaces() {
+	public boolean readSpaces() {
 		// Reads a text file with all the valid spaces and their valid connections. This should also make different versions easier to implement.
 		try (Scanner scanner = new Scanner(new File("src\\9MM Spaces.txt"))) {
 			int tempKey;
@@ -183,8 +250,7 @@ public class Board {
 					tempVals.add(nextLine.nextInt()); // adds next integer to tempVals
 				}
 				spaces.put(tempKey, tempVals); // adds a new map to the HashMap
-				// System.out.print("Key: " + tempKey + "  Valid Moves: " + spaces.get(tempKey) + "\n"); // This is just a test line to show the file was read correctly
-				//tempVals.clear();
+				nextLine.close();
 				
 			}
 			
@@ -196,11 +262,14 @@ public class Board {
 				}
 				//System.out.println();
 				mills.add(tempMill);
+				nextLine.close();
 			
 			}
 		scanner.close();
+		return true;
 		} catch (Exception e) {
 			System.err.println("something broke");
+			return false;
 		}
 	}
 }

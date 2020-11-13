@@ -1,4 +1,8 @@
-package morris;
+package UnitTests;
+
+import morris.Board;
+import morris.GameLogic;
+
 
 public class TestCases {
 	
