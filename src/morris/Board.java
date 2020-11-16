@@ -8,9 +8,9 @@ import java.util.Scanner;
 
 public class Board {
 	
-	private HashMap<Integer, List<Integer>> spaces = new HashMap<Integer, List<Integer>>(); // This is essentially a dynamic array of maps. With a given spot being the key and the spots it's connected to being values.
-	private List<Integer> whitePieces = new ArrayList<Integer>(); // These are arraylists (dynamic arrays) that keep track of player pieces. 
-	private List<Integer> blackPieces = new ArrayList<Integer>(); // All pieces start with value 0, are updated to the value of the spot where they're placed, and are deleted when a piece is removed from the board.
+	public HashMap<Integer, List<Integer>> spaces = new HashMap<Integer, List<Integer>>(); // This is essentially a dynamic array of maps. With a given spot being the key and the spots it's connected to being values.
+	public List<Integer> whitePieces = new ArrayList<Integer>(); // These are arraylists (dynamic arrays) that keep track of player pieces. 
+	public List<Integer> blackPieces = new ArrayList<Integer>(); // All pieces start with value 0, are updated to the value of the spot where they're placed, and are deleted when a piece is removed from the board.
 	private List<int[]> mills = new ArrayList<int[]>();
 	private enum eColor {white, black, invalid}; // added enums for each player to make the code a bit cleaner
 	
@@ -131,12 +131,12 @@ public class Board {
 			switch (convertToEnum(playerColor)) {
 				case white: {
 					whitePieces.set(pieceIndex, space);
-					System.out.println("white placePiece worked!");
+					//System.out.println("white placePiece worked!");
 					return true;
 				}
 				case black: {
 					blackPieces.set(pieceIndex, space);
-					System.out.println("black placePiece worked!");
+					//System.out.println("black placePiece worked!");
 					return true;
 				}
 				default: {
@@ -175,6 +175,7 @@ public class Board {
 	}
 	
 	public void removePiece(String playerColor, int piece) {
+		//System.out.println("board.removePiece");
 		switch (convertToEnum(playerColor)) {
 		case white: {
             whitePieces.remove(whitePieces.indexOf(piece));

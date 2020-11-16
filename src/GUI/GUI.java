@@ -1,18 +1,24 @@
 package GUI;
 
 import morris.Board;
+import morris.GameLogic;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 import javafx.util.Pair;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
@@ -45,11 +51,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	Scene scene = new Scene(pane, 900, 700);
 
 	// GUI needs a copy of board class for assigning values
-	Board board;
+	Board board = new Board(9);
+	
+	GameLogic gameLogic = new GameLogic();
 	
 	// text tells user when they can remove a piece
-	final Text chooseWhite = new Text(430, 10, "Choose a white piece to remove!");
-	final Text chooseBlack = new Text(430, 10, "Choose a black piece to remove!");
+	final Text choosePieceMsg = new Text(320, 10, "You created a mill! Choose an opponents piece to remove!");
 	
 	/****************constructors**************************************************/
 	//// base constructor ////
@@ -96,12 +103,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	   	}
 	}
 	
-			
-	/****************setters*******************************************************/
-	
-	///// should this become phase one function?
-	// function for assigning GUI coordinates to the appropriate piece
-	public void setLocation() {
+	// function finds coordinates of target location when piece is placed
+	public void findTargetCoords() {
 		// loop iterates through all possible target locations
 		for (int i = 0; i < targets.size(); i++) {
 			//Target tempTarget = targets.get(i);
@@ -114,73 +117,79 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 				}
 			});
 		}
+	}
+	
+	/****************setters*******************************************************/
+	
+	// function starts with white placing a piece
+	// switched back and forth until all pieces have been placed for each color
+	public void placePiece() {
+		findTargetCoords();
 		
+	}
+	
+	
+	///// should this become phase one function?
+	// function for assigning GUI coordinates to the appropriate piece
+	public void setEvent() {
+		findTargetCoords();
 		// loop iterates through all pieces (blackPieces and whitePieces should be the same size)
 		for (int i = 0; i < blackPieces.size(); i++) {
-			int temp = i;
-			// event assigns GUI coordinates to appropriate black piece
-			blackPieces.get(i).pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
-				public void handle(DragEvent event) {
-					/* the drag and drop gesture ended */
-		            /* if the data was successfully moved, clear it */
-					if (event.getTransferMode() == TransferMode.MOVE) {
-		                blackPieces.get(temp).pieceImg.setImage(null);
-		                //blackPieces.get(temp).setCoords(tempCoords);
-		            }
-					//System.out.println("tempCoords = " + tempCoords + "\n\n");
-					blackPieces.get(temp).setCoords(tempCoords);
-					blackPieces.get(temp).setPieceLoc(findLoc(tempCoords));
-					board.placePiece("black", temp, findLoc(tempCoords));
-					System.out.println("Black: board.checkMill = " + board.checkMill("black", findLoc(tempCoords)));
-					if (board.checkMill("black", findLoc(tempCoords))) {
-						pane.getChildren().add(chooseWhite);
-						choosePiece("white");
-					}
-					event.consume();
-					
-					Piece newPiece = new Piece("black", tempCoords, findLoc(tempCoords));
-					newPiece.makePiece();
-					blackPieces.set(temp, newPiece);
-				}
-			});
-			
-			// event assigns GUI coordinates to appropriate white piece
-			whitePieces.get(i).pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
-				public void handle(DragEvent event) {
-					/* the drag and drop gesture ended */
-		            /* if the data was successfully moved, clear it */
-					if (event.getTransferMode() == TransferMode.MOVE) {
-		                whitePieces.get(temp).pieceImg.setImage(null);
-		                //whitePieces.get(temp).setCoords(tempCoords);
-		            }
-					//System.out.println("tempCoords = " + tempCoords + "\n\n");
-					whitePieces.get(temp).setCoords(tempCoords);
-					whitePieces.get(temp).setPieceLoc(findLoc(tempCoords));
-					board.placePiece("white", temp, findLoc(tempCoords));
-					System.out.println("White: board.checkMill = " + board.checkMill("white", findLoc(tempCoords)));
-					if (board.checkMill("white", findLoc(tempCoords))) {
-						pane.getChildren().add(chooseBlack);
-						choosePiece("black");
-					}
-					event.consume();
-					
-					Piece newPiece = new Piece("white", tempCoords, findLoc(tempCoords));
-					newPiece.makePiece();
-					whitePieces.set(temp, newPiece);
-				}
-			});
+			setLocation(blackPieces.get(i), i, "black", "white");
+			setLocation(whitePieces.get(i), i, "white", "black");
 		}
-	}		
+	}	
+	
+	public void setLocation(Piece refer, int index, String playerColor, String opponentClr) {
+		// event assigns GUI coordinates to appropriate reference piece
+		refer.pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
+			public void handle(DragEvent event) {
+				/* the drag and drop gesture ended */
+	            /* if the data was successfully moved, clear it */
+				if (event.getTransferMode() == TransferMode.MOVE) {
+	                refer.pieceImg.setImage(null);
+	                //refer.setCoords(tempCoords);
+	            }
+				//System.out.println("tempCoords = " + tempCoords + "\n\n");
+				refer.setCoords(tempCoords);
+				refer.setPieceLoc(findLoc(tempCoords));
+				board.placePiece(playerColor, index, findLoc(tempCoords));
+				//System.out.println(playerColor + ": board.checkMill = " + board.checkMill("white", findLoc(tempCoords)));
+				if (board.checkMill(playerColor, findLoc(tempCoords))) {
+					System.out.println(playerColor + ": board.checkMill = true");
+					pane.getChildren().add(choosePieceMsg);
+					choosePiece(opponentClr);
+				}
+				if (index == 0 && playerColor == "black") {
+					System.out.println("if entered");
+					phaseOne = false;
+				}
+				disablePiece(true, playerColor);
+				disablePiece(false, opponentClr);
+				event.consume();
+			}
+		});
+	}
 			
+	// function called multiple times on single mill creation
 	// function to call if checkMill returns true, that removes a piece from the board
 	public void removePieceGUI(String color, int boardLoc) {
-		System.out.println("Entered removePieceGUI");
+		//System.out.println("Entered removePieceGUI");
+		disableOccupiedTarget(true, color);
+		
 		int tempLoc = -1;
+		pane.getChildren().remove(choosePieceMsg);
 		for (int i = 0; i < blackPieces.size(); i++) {
 			if (color == "black") {
 				if (blackPieces.get(i).pieceLoc == boardLoc) {
 					blackPieces.get(i).setPieceLoc(-5); // set pieceLoc variable to invalid location, making it clear its not on the board
-					blackPieces.get(i).pieceImg.setImage(null); // remove piece from GUI
+					for (int j = 0; j < targets.size(); j++) {
+						if (targets.get(j).getTargetLoc() == boardLoc) {
+							Image image = new Image("/img/target.PNG");
+							targets.get(j).targetImg.setImage(image);
+							targets.get(j).targetImg.setDisable(false);
+						}
+					}
 					tempLoc = blackPieces.get(i).getPieceLoc(); 
 					board.removePiece("black", boardLoc);
 					System.out.println("Attempting to remove black piece at: " + boardLoc);
@@ -189,7 +198,13 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 			else if (color == "white") {
 				if (whitePieces.get(i).pieceLoc == boardLoc) {
 					whitePieces.get(i).setPieceLoc(-5);
-					whitePieces.get(i).pieceImg.setImage(null);
+					for (int j = 0; j < targets.size(); j++) {
+						if (targets.get(j).getTargetLoc() == boardLoc) {
+							Image image = new Image("/img/target.PNG");
+							targets.get(j).targetImg.setImage(image);
+							targets.get(j).targetImg.setDisable(false);
+						}
+					}
 					tempLoc = whitePieces.get(i).getPieceLoc();
 					board.removePiece("white", boardLoc);
 					System.out.println("Attempting to remove white piece at: " + boardLoc);
@@ -206,13 +221,13 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	
 	/****************misc functions************************************************/
 	
+	// @throws phaseOneError 
 	// function starts GUI
 	@Override  
-	public void start(Stage stage) {
+	public void start(Stage stage){
 		initGUIBoard(stage);
 		checkPieceLoc(stage);
-    	board = new Board(9);
-        
+
     }
 	
 	// function initializes the board
@@ -224,10 +239,10 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     	final Text blackText = new Text(815,10,"Black Pieces");				
     	pane.getChildren().add(whiteText);
     	pane.getChildren().add(blackText);
-    	final Text whiteTrash = new Text(15, 595, "Remove Black");
-    	final Text blackTrash = new Text(815, 595, "Remove White");
-    	pane.getChildren().add(whiteTrash);
-    	pane.getChildren().add(blackTrash);
+//    	final Text whiteTrash = new Text(15, 595, "Remove Black");
+//    	final Text blackTrash = new Text(815, 595, "Remove White");
+//    	pane.getChildren().add(whiteTrash);
+//    	pane.getChildren().add(blackTrash);
     	
     	// Here we create a background visual which displays the board
     	ImageView mv = new ImageView("/img/nineMensMorris.png");
@@ -238,12 +253,58 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     	//printReverseSpaces(reverseInfo);
     	//printSpaces(targetInfo);
     	initTargets();
-    	setLocation();
+    	turnTracker();
     	
     	stage.setScene(scene);
         stage.show(); 
 	}
+	
+	boolean phaseOne = true;
+	// function handles calling phase functions
+	public void turnTracker() {
+		for (int i = 0; i < whitePieces.size(); i++) {
+			phaseOne("white", "black");
+		}
 		
+//		if (!phaseOne) {
+//			System.out.println("entered phase two");
+//			reInitPieces();
+//		}
+		
+		
+		//phaseTwo("white", "black");
+//		while(gameLogic.winCondition("white", board) && gameLogic.winCondition("black", board)) {
+//			phaseTwo("black", "white");
+//			phaseTwo("white", "black");
+//			
+//		}
+	}
+
+	public void phaseOne(String playerClr, String opponentClr) {
+		disablePiece(true, opponentClr);
+		disablePiece(false, playerClr);	
+		setEvent();
+	}
+	
+	// phase two function contains both phase two and phase three
+	public void phaseTwo(String playerClr, String opponentClr) {
+		Set<Integer> moves = availableMoves(playerClr);
+		enablePossibleMoves(moves);
+	}
+	
+	public void reInitPieces() {
+		ArrayList<Piece> tempWhite = new ArrayList<Piece>();
+		ArrayList<Piece> tempBlack = new ArrayList<Piece>();
+		for (int i = 0; i < whitePieces.size(); i++) {
+			Piece temp1 = new Piece("white", whitePieces.get(i).coordinates, whitePieces.get(i).pieceLoc);
+			tempWhite.add(temp1);
+			Piece temp2 = new Piece("black", blackPieces.get(i).coordinates, blackPieces.get(i).pieceLoc);
+			tempBlack.add(temp2);
+		}
+		whitePieces = tempWhite;
+		blackPieces = tempBlack;
+	}
+	
 	// function creates all player pieces
 	public void initPieces() {
 		// for loop creates 9 white player pieces, sets size and location, and adds them to list/pane
@@ -323,77 +384,95 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	public void choosePiece(String color) {
 		System.out.println("Entered choosePiece");
 		
-//		ArrayList<Integer> locations = new ArrayList<Integer>();
-//		
-//		if (color == "white") {
-//			for (int i = 0; i < whitePieces.size(); i++) {
-//				if (whitePieces.get(i).getPieceLoc() > 0) {
-//					locations.add(whitePieces.get(i).getPieceLoc());
-//				}
-//			}
-//		}
-//		
-//		else if (color == "black") {
-//			for (int i = 0; i < blackPieces.size(); i++) {
-//				if (blackPieces.get(i).getPieceLoc() > 0) {
-//					locations.add(blackPieces.get(i).getPieceLoc());
-//				}
-//			}
-//		}
+		List<Integer> locations = new ArrayList<Integer>();
+		locations = board.getPieces(color);
 		
-//		if (color == "black") {
-//		for (int i = 0; i < blackPieces.size(); i++) {
-//			if (blackPieces.get(i).pieceLoc > 0) {
-//				blackPieces.get(i).makePiece();
-//			}
-//		}
-//	}
-//	else if (color == "white") {
-//		for (int i = 0; i < whitePieces.size(); i++) {
-//			if (whitePieces.get(i).pieceLoc > 0) {
-//				whitePieces.get(i).makePiece();
-//			}
-//		}
-//	}
-//	
-	if (color == "black") {
+		for (int i = 0; i < locations.size(); i++) {
+			int currLoc  = locations.get(i);
+			for (int j = 0; j < targets.size(); j++) {
+				if (locations.get(i).equals(targets.get(j).getTargetLoc())) {
+					targets.get(j).targetImg.setDisable(false);
+					targets.get(j).targetImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
+						public void handle(MouseEvent event) {
+							//System.out.println("target click event");
+							removePieceGUI(color, currLoc);
+							event.consume();
+						}
+					});
+				}
+			}
+		}
+	}
+	
+	// function sets disable property for all targets that are currently occupied by given color
+	public void disableOccupiedTarget(boolean truth, String color) {	
+		List<Integer> locations = board.getPieces(color);
+		for (int i = 0; i < locations.size(); i++) {
+			for (int j = 0; j < targets.size(); j++) {
+				if (locations.get(i).equals(targets.get(j).getTargetLoc())) {
+					targets.get(j).targetImg.setDisable(truth);
+				}
+			}
+		}
+	}
+	
+	// function disable or enables all pieces of specified color
+	public void disablePiece(boolean truth, String color) {
 		for (int i = 0; i < blackPieces.size(); i++) {
-			int temp = i;
-			blackPieces.get(temp).pieceImg.setOnMouseClicked(new EventHandler<MouseEvent>(){
-				public void handle(MouseEvent event) {
-					blackPieces.get(temp).pieceImg.setDisable(false); // troubleshooting
-					System.out.println("choosePiece black:");
-					removePieceGUI("black", blackPieces.get(temp).pieceLoc);
-					pane.getChildren().remove(chooseBlack);
-				}
-			});
+			if (color == "black") {
+				blackPieces.get(i).pieceImg.setDisable(truth);
+			}
+			else if (color == "white") {
+				whitePieces.get(i).pieceImg.setDisable(truth);
+			}
 		}
 	}
 	
-	else if (color == "white") {
-		for (int i = 0; i < whitePieces.size(); i++) {
-			int temp = i;
-			whitePieces.get(temp).pieceImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
-				public void handle(MouseEvent event) {
-					whitePieces.get(temp).pieceImg.setDisable(false); // troubleshooting
-					System.out.println("choosePiece white:");
-					removePieceGUI("white", whitePieces.get(temp).pieceLoc);
-					pane.getChildren().remove(chooseWhite);
-				}
-			});
-		}
-	}		
 
-	}
-	
 	// will need to be moved to turn manager?
     public static void main(String[] args) {
-        launch();
+       launch();
     }
-
-	@Override
+	
+    @Override
 	public void handle(ActionEvent arg0) {
 		// TODO Auto-generated method stub
-		
 	}
+
+    // enables target locations that player can move to
+    public void enablePossibleMoves(Set<Integer> moves) {
+    	for (int current : moves ) {
+    		for (int j = 0; j < targets.size(); j++) {
+    			if (current == targets.get(j).targetLoc) {
+    				targets.get(j).targetImg.setDisable(false);
+    			}
+    			else {
+    				targets.get(j).targetImg.setDisable(true);
+    			}
+    		}
+    	}
+    }
+    
+    // finds target locations that are available for player
+    public Set<Integer> availableMoves(String color){
+    	Set<Integer> possibleMoves = new HashSet<Integer>();
+    	if (color == "white") {
+    		for (int i = 0; i < whitePieces.size(); i++) {
+    			possibleMoves.addAll(board.spaces.get(whitePieces.get(i).pieceLoc));
+    		}
+    	}
+    	else if (color == "black") {
+    		for (int i = 0; i < blackPieces.size(); i++) {
+    			possibleMoves.addAll(board.spaces.get(blackPieces.get(i).pieceLoc));
+    		}
+    	}
+    	System.out.println(possibleMoves);
+    	return possibleMoves;
+    }
+    
+    public void moveGUI(String color){
+    	
+    }    
 }
+
+

@@ -121,13 +121,7 @@ public class Piece extends GUI implements EventHandler<ActionEvent> {
 //	        }
 //	    });
 	}
-	
-	
-	@Override
-	public void handle(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
 }
+
 
 
