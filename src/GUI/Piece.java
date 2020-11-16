@@ -23,25 +23,6 @@ public class Piece extends GUI implements EventHandler<ActionEvent> {
 	public Piece() {}
 	
 	////extended constructors ////
-	// constructor to differentiate between colors
-	public Piece(String color) {
-		pieceLoc = -1;
-		if (color == "white") {
-			pieceImg = new ImageView("/img/white_transparent.png");
-			pieceImg.setX(50); coordinates = new Pair<Integer, Integer>(50, 50);
-		}
-		else if (color == "black") {
-			pieceImg = new ImageView("/img/black_transparent.png");
-			 pieceImg.setX(825); coordinates = new Pair<Integer, Integer>(825, 50);
-		}
-		else {
-			System.out.print("Error in Piece constructor");
-		}
-		pieceClr = color;
-		pieceImg.setFitHeight(35); pieceImg.setFitWidth(35);
-		pieceImg.setY(50);
-	}
-	
 	public Piece(String color, Pair<Integer, Integer> tempCoords, int boardLoc) {
 		pieceLoc = boardLoc;
 		if (color == "white") {
@@ -107,19 +88,6 @@ public class Piece extends GUI implements EventHandler<ActionEvent> {
 	            event.consume();
 	        }
 	    });
-
-	    // cannot have multiple "setOnDragDone" methods for one piece
-	    // method has been moved to GUI class, in setLocation method
-//	    pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
-//	        public void handle(DragEvent event) {
-//	            /* the drag and drop gesture ended */
-//        		/* if the data was successfully moved, clear it */
-//	        	if (event.getTransferMode() == TransferMode.MOVE) {
-//	                pieceImg.setImage(null);
-//	            }
-//	            event.consume();
-//	        }
-//	    });
 	}
 }
 

@@ -109,16 +109,7 @@ public class Target extends GUI implements EventHandler<ActionEvent> {
     	        //System.out.println("Actual X = " + event.getX() + "\nActual Y = " + event.getY());
     	    }
     	});
-		
-//		targetImg.setOnDragExited(new EventHandler<DragEvent>() {
-//	    public void handle(DragEvent event) {
-//	        /* mouse moved away, remove the graphical cues */
-//	    		event.consume();
-//	    		
-//	    	}
-//		});
 	}
-
 }
 
 
