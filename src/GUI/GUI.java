@@ -29,7 +29,10 @@ import javafx.stage.Stage;
 
 public class GUI extends Application implements EventHandler<ActionEvent> {
 
+	
 	/****************variables*****************************************************/
+	
+	
 	// HashMap with Key == board location  and  Value == coordinate location
 	HashMap<Integer, Pair<Integer, Integer>> targetInfo = new HashMap<Integer, Pair<Integer, Integer>>(); 
 	// HashMap with Key == coordinate location  and  Value == board location
@@ -41,8 +44,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	// list of all black player pieces
 	ArrayList<Piece> blackPieces = new ArrayList<Piece>();
 
-	// temporary variable for setLocation function
+	// temporary variable for setLocation method
 	Pair<Integer, Integer> tempCoords;
+	
+	// number of pieces per player
+	int pieces = 9;
 	
 	// display pane that all objects must go onto
 	Pane pane = new Pane();
@@ -51,16 +57,18 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	Scene scene = new Scene(pane, 900, 700);
 
 	// GUI needs a copy of board class for assigning values
-	Board board = new Board(9);
+	Board board = new Board(pieces);
 	
 	GameLogic gameLogic = new GameLogic();
 	
 	// text tells user when they can remove a piece
 	final Text choosePieceMsg = new Text(390, 335, "You created a mill!\nChoose an opponent's\npiece to remove!");
 	
+	
 	/****************getters*******************************************************/ 
 	
-	// function finds coordinates of target location when piece is placed
+	
+	// method finds coordinates of target location when piece is placed
 	public void findTargetCoords() {
 		// loop iterates through all possible target locations
 		for (int i = 0; i < targets.size(); i++) {
@@ -76,20 +84,22 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		}
 	}
 	
+	
 	/****************setters*******************************************************/
 	
-	// function for assigning GUI coordinates to the appropriate piece
+	
+	// method for assigning GUI coordinates to the appropriate piece
 	public void setEvent() {
 		findTargetCoords();
 		// loop iterates through all pieces (blackPieces and whitePieces should be the same size)
-		for (int i = 0; i < blackPieces.size(); i++) {
+		for (int i = 0; i < whitePieces.size(); i++) {
 			setLocation(blackPieces.get(i), i, "black", "white");
 			setLocation(whitePieces.get(i), i, "white", "black");
 		}
 	}	
 	
 	
-	public void setLocation(Piece refer, int index, String playerColor, String opponentClr) {
+	public void setLocation(Piece refer, int index, String playerColor, String opponentClr) { // needs to be refactored
 		// event assigns GUI coordinates to appropriate reference piece
 		refer.pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
 			public void handle(DragEvent event) {
@@ -120,8 +130,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		});
 	}
 			
-	// function called multiple times on single mill creation
-	// function to call if checkMill returns true, that removes a piece from the board
+
+	// lets player remove a piece from the board
 	public void removePieceGUI(String color, int boardLoc) {
 		//System.out.println("Entered removePieceGUI");
 		disableOccupiedTarget(true, color);
@@ -144,7 +154,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		}
 	}
 	
-	// function updates back-end code to be up to date with GUI when piece is removed
+	
+	// updates back-end code to be up to date with GUI when piece is removed
 	public Integer removeInfo(Piece refer, int boardLoc) {
 		int tempLoc = -1;
 		if (refer.pieceLoc == boardLoc) {
@@ -163,24 +174,63 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		return tempLoc;
 	}
 	
-	/****************misc functions************************************************/
+	
+	/****************Primary Methods************************************************/
+	
+	
+	// initializes JavaFX environment
+    public static void main(String[] args) {
+       launch();
+       System.out.println("humpty dumpty");
+    }
+	
 	
 	// @throws phaseOneError 
-	// function starts GUI
+	// initializes GUI and gameplay logic
 	@Override  
 	public void start(Stage stage){
 		initGUIBoard(stage);
+    	initPieces(pieces);
+    	//printReverseSpaces(reverseInfo);		// for testing
+    	//printSpaces(targetInfo);				// for testing
+    	initTargets();
+		
+		turnManager(stage);
+		System.out.println("testing 1 2 3");
+		
 		checkPieceLoc(stage);
-
+		System.out.println("the end");
     }
 	
-	// function initializes the board
+	
+	
+	// turn-based logic for gameplay operations
+	public void turnManager(Stage stage) { 
+
+		
+		for (int i = 0; i < 9; i++) {
+			phaseOne("white");
+			phaseOne("black");
+			System.out.println("this is a for loop");
+		}
+		System.out.println("do not test me");
+		/*
+		while(gameLogic.winCondition("white", board) == false && gameLogic.winCondition("black", board) == false) {
+			phaseTwo("black");
+			phaseTwo("white");
+			
+		}*/
+
+
+	}
+	
+	// initializes the board
 	public void initGUIBoard(Stage stage) {
 		// Here we edit the window for aesthetics and readability
     	stage.setTitle("Nine Men's Morris"); // sets title of window
     	stage.setResizable(false);			 // disables ability to resize window
     	final Text whiteText = new Text(30, 40, "White Pieces");
-    	final Text blackText = new Text(810, 40, "Black Pieces");				
+    	final Text blackText = new Text(810, 40, "Black Pieces");
     	pane.getChildren().add(whiteText);
     	pane.getChildren().add(blackText);
 //    	final Text whiteTrash = new Text(15, 595, "Remove Black");
@@ -192,50 +242,45 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     	ImageView mv = new ImageView("/img/nineMensMorris.png");
     	mv.setX(150); mv.setY(50);
     	pane.getChildren().addAll(mv);
-    	
-    	initPieces();
-    	//printReverseSpaces(reverseInfo);
-    	//printSpaces(targetInfo);
-    	initTargets();
-
     	stage.setScene(scene);
         stage.show(); 
-        
-        turnTracker();
-	}
-	
-	// function handles calling phase functions
-	public void turnTracker() {
-		
-		for (int i = 0; i < whitePieces.size(); i++) {
-			phaseOne("white", "black");
-		}
-			
-		//phaseTwo("white", "black");
-//		while(gameLogic.winCondition("white", board) && gameLogic.winCondition("black", board)) {
-//			phaseTwo("black", "white");
-//			phaseTwo("white", "black");
-//			
-//		}
+
 	}
 
-	// function executes phase one 
-	public void phaseOne(String playerClr, String opponentClr) {
-		disablePiece(true, opponentClr);
-		disablePiece(false, playerClr);	
+
+	// executes phase one 
+	public void phaseOne(String colorInPlay) {
+		String colorNotInPlay;
+		if (colorInPlay == "white") {
+			colorNotInPlay = "black";
+		}
+		else {
+			colorNotInPlay = "white";
+		}
+		disablePiece(true, colorNotInPlay);
+		disablePiece(false, colorInPlay);	
 		setEvent();
 	}
 
-	// phase two function contains both phase two and phase three
-	public void phaseTwo(String playerClr, String opponentClr) {
-		Set<Integer> moves = availableMoves(playerClr);
+	// phase two method contains both phase two and phase three of traditional gameplay rules
+	// 2: moving pieces around the board
+	// 3: "flying" pieces
+	public void phaseTwo(String colorInPlay) {
+		String colorNotInPlay;
+		if (colorInPlay == "white") {
+			colorNotInPlay = "black";
+		}
+		else {
+			colorNotInPlay = "white";
+		}
+		Set<Integer> moves = availableMoves(colorInPlay);
 		enablePossibleMoves(moves);
 	}
 
-	// function initializes pieces, giving them drag and drop properties
-	public void initPieces() {
+	// initializes pieces, giving them drag and drop properties
+	public void initPieces(int pieces) {
 		// for loop creates 9 white player pieces, sets size and location, and adds them to list/pane
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < pieces; i++) {
 			Pair<Integer, Integer> whitePair = new Pair<Integer, Integer>(50, 50);
 			Piece tempWhite = new Piece("white", whitePair, -1);
 			tempWhite.makePiece();
@@ -250,7 +295,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     	}
 	}
 
-	// function re-initializes pieces after they have all been placed on the board
+	// re-initializes pieces after they have all been placed on the board
 	public void reInitPieces() {
 		ArrayList<Piece> tempWhite = new ArrayList<Piece>();
 		ArrayList<Piece> tempBlack = new ArrayList<Piece>();
@@ -271,7 +316,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		System.out.print("done");
 	}
 	
-	// function removes piece image from all target locations
+	// removes piece image from all target locations
 	public void removePieces() {
 		for (int i = 0; i < targets.size(); i++) {
 			Image image = new Image("/img/target.PNG");
@@ -279,7 +324,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		}
 	}
 
-	// function initializes targets, giving them drag and drop properties
+	// initializes targets, giving them drag and drop properties
 	public void initTargets() {
 		
 		readSpaces();
@@ -299,7 +344,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     	}
 	}
 
-	// function takes in GUI coordinates and returns board location
+	// takes in GUI coordinates and returns board location
 	public int findLoc(Pair<Integer, Integer> coords) {
 		//System.out.println("coords = " + coords);
 		//System.out.println("reverseInfo.containsKey(coords) = " + reverseInfo.containsKey(coords) + "\n");
@@ -310,7 +355,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 			return -2;
 	}
 
-	// function takes in target location info from spaces.txt and stores them in HashMap targetInfo
+	// takes in target location info from spaces.txt and stores them in HashMap targetInfo
 	public void readSpaces() {
 		try {
 			// scanner for each line
@@ -338,9 +383,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	   	}
 	}
 
-	// function that lets user pick which piece to be removed
+	// lets user pick which piece to be removed
 	public void choosePiece(String color) {
-		System.out.println("Entered choosePiece");
+		System.out.println("Entered choosePiece"); // for debugging
 		
 		List<Integer> locations = new ArrayList<Integer>();
 		locations = board.getPieces(color);
@@ -362,7 +407,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		}
 	}
 	
-	// function sets disable property for all targets that are currently occupied by given color
+	// sets disable property for all targets that are currently occupied by given color
 	public void disableOccupiedTarget(boolean truth, String color) {	
 		List<Integer> locations = board.getPieces(color);
 		for (int i = 0; i < locations.size(); i++) {
@@ -374,7 +419,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		}
 	}
 	
-	// function disable or enables all pieces of specified color
+	// disable or enables all pieces of specified color
 	public void disablePiece(boolean truth, String color) {
 		for (int i = 0; i < blackPieces.size(); i++) {
 			if (color == "black") {
@@ -386,11 +431,6 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		}
 	}
 	
-
-	// will need to be moved to turn manager?
-    public static void main(String[] args) {
-       launch();
-    }
 	
     @Override
 	public void handle(ActionEvent arg0) {
@@ -428,9 +468,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
     	return possibleMoves;
     }   
 
-    /***************print functions************************************************/
+    /***************Print Methods************************************************/
     
-	// function prints out spaces stored in HashMap targets to verify everything is being read in correctly
+	// prints out spaces stored in HashMap targets to verify everything is being read in correctly
 	public static void printSpaces(HashMap targetInfo) {
 	   	Iterator ite = targetInfo.entrySet().iterator();
 	   	while (ite.hasNext()) {
@@ -441,7 +481,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	   	}
 	}
 		    
-	// function prints out spaces stored in HashMap targets to verify everything is being read in correctly
+	// prints out spaces stored in HashMap targets to verify everything is being read in correctly
 	public static void printReverseSpaces(HashMap reverseInfo) {
 	   	Iterator ite = reverseInfo.entrySet().iterator();
 	   	while (ite.hasNext()) {
@@ -452,7 +492,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	   	}
 	}
 
-	// function prints location of all pieces when window is closed
+	// prints location of all pieces when window is closed
 	public void checkPieceLoc(Stage stage) {
 		stage.setOnCloseRequest((event) -> {
 	       	for (int i = 0; i < blackPieces.size(); i++) {
