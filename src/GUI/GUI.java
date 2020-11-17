@@ -30,7 +30,7 @@ import javafx.stage.Stage;
 public class GUI extends Application implements EventHandler<ActionEvent> {
 
 	
-	/****************variables*****************************************************/
+	/****************Variables*****************************************************/
 	
 	
 	// HashMap with Key == board location  and  Value == coordinate location
@@ -48,7 +48,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	Pair<Integer, Integer> tempCoords;
 	
 	// number of pieces per player
-	int pieces = 9;
+	final int pieces = 9;
 	
 	// display pane that all objects must go onto
 	Pane pane = new Pane();
@@ -63,9 +63,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	
 	// text tells user when they can remove a piece
 	final Text choosePieceMsg = new Text(390, 335, "You created a mill!\nChoose an opponent's\npiece to remove!");
+	Text numWhite;
+	Text numBlack;
 	
 	
-	/****************getters*******************************************************/ 
+	/****************Getters*******************************************************/ 
 	
 	
 	// method finds coordinates of target location when piece is placed
@@ -85,14 +87,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	}
 	
 	
-	/****************setters*******************************************************/
+	/****************Setters*******************************************************/
 	
 	
 	// method for assigning GUI coordinates to the appropriate piece
 	public void setEvent() {
 		findTargetCoords();
 		// loop iterates through all pieces (blackPieces and whitePieces should be the same size)
-		for (int i = 0; i < whitePieces.size(); i++) {
+		for (int i = 0; i < pieces; i++) {
 			setLocation(blackPieces.get(i), i, "black", "white");
 			setLocation(whitePieces.get(i), i, "white", "black");
 		}
@@ -121,7 +123,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 				}
 				if (index == 0 && playerColor == "black") {
 					System.out.println("calling reInitPieces");
-					reInitPieces();
+					//reInitPieces();
 				}
 				disablePiece(true, playerColor);
 				disablePiece(false, opponentClr);
@@ -140,10 +142,16 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		pane.getChildren().remove(choosePieceMsg);
 		for (int i = 0; i < blackPieces.size(); i++) {
 			if (color == "black") {
+				pane.getChildren().remove(numBlack);
 				tempLoc = removeInfo(blackPieces.get(i), boardLoc);
+				numBlack = new Text(755, 125, "Black Pieces Remaining: " + board.getNumPieces("black"));
+				pane.getChildren().add(numBlack);
 			}
 			else if (color == "white") {
+				pane.getChildren().remove(numWhite);
 				tempLoc = removeInfo(whitePieces.get(i), boardLoc);
+				numWhite = new Text(15, 125, "White Pieces Remaining: " + board.getNumPieces("white"));
+				pane.getChildren().add(numWhite);
 			}
 		}
 		// re-enables target location that was previous occupied by player piece
@@ -152,6 +160,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 				targets.get(i).targetImg.setDisable(false);
 			}
 		}
+		
 	}
 	
 	
@@ -208,9 +217,9 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	public void turnManager(Stage stage) { 
 
 		
-		for (int i = 0; i < 9; i++) {
-			phaseOne("white");
+		for (int i = 0; i < pieces; i++) {
 			phaseOne("black");
+			phaseOne("white");
 			System.out.println("this is a for loop");
 		}
 		System.out.println("do not test me");
@@ -229,14 +238,14 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		// Here we edit the window for aesthetics and readability
     	stage.setTitle("Nine Men's Morris"); // sets title of window
     	stage.setResizable(false);			 // disables ability to resize window
-    	final Text whiteText = new Text(30, 40, "White Pieces");
-    	final Text blackText = new Text(810, 40, "Black Pieces");
+    	final Text whiteText = new Text(45, 60, "White Pieces");
+    	final Text blackText = new Text(790, 60, "Black Pieces");
+    	numBlack = new Text(755, 125, "Black Pieces Remaining: " + board.getNumPieces("black"));
+    	numWhite = new Text(15, 125, "White Pieces Remaining: " + board.getNumPieces("white"));
+    	pane.getChildren().add(numWhite);
+    	pane.getChildren().add(numBlack);
     	pane.getChildren().add(whiteText);
     	pane.getChildren().add(blackText);
-//    	final Text whiteTrash = new Text(15, 595, "Remove Black");
-//    	final Text blackTrash = new Text(815, 595, "Remove White");
-//    	pane.getChildren().add(whiteTrash);
-//    	pane.getChildren().add(blackTrash);
     	
     	// Here we create a background visual which displays the board
     	ImageView mv = new ImageView("/img/nineMensMorris.png");
@@ -281,13 +290,13 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	public void initPieces(int pieces) {
 		// for loop creates 9 white player pieces, sets size and location, and adds them to list/pane
 		for (int i = 0; i < pieces; i++) {
-			Pair<Integer, Integer> whitePair = new Pair<Integer, Integer>(50, 50);
+			Pair<Integer, Integer> whitePair = new Pair<Integer, Integer>(60, 70);
 			Piece tempWhite = new Piece("white", whitePair, -1);
 			tempWhite.makePiece();
 			whitePieces.add(tempWhite);
 			pane.getChildren().add(tempWhite.pieceImg);
 			
-			Pair<Integer, Integer> blackPair = new Pair<Integer, Integer>(825, 50);
+			Pair<Integer, Integer> blackPair = new Pair<Integer, Integer>(805, 70);
 			Piece tempBlack = new Piece("black", blackPair, -1);
 			tempBlack.makePiece();
 			blackPieces.add(tempBlack);
@@ -299,8 +308,8 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	public void reInitPieces() {
 		ArrayList<Piece> tempWhite = new ArrayList<Piece>();
 		ArrayList<Piece> tempBlack = new ArrayList<Piece>();
-		removePieces();
-		for (int i = 0; i < whitePieces.size(); i++) {
+		removeImgs();
+		for (int i = 0; i < pieces; i++) {
 			Piece temp1 = new Piece("white", whitePieces.get(i).coordinates, whitePieces.get(i).pieceLoc);
 			temp1.makePiece();
 			tempWhite.add(temp1); 
@@ -313,11 +322,11 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 		}
 		whitePieces.clear();
 		blackPieces.clear();
-		System.out.print("done");
+		System.out.println("done");
 	}
 	
 	// removes piece image from all target locations
-	public void removePieces() {
+	public void removeImgs() {
 		for (int i = 0; i < targets.size(); i++) {
 			Image image = new Image("/img/target.PNG");
 			targets.get(i).targetImg.setImage(image);
@@ -398,7 +407,12 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 					targets.get(j).targetImg.setOnMouseClicked(new EventHandler<MouseEvent>() {
 						public void handle(MouseEvent event) {
 							//System.out.println("target click event");
-							removePieceGUI(color, currLoc);
+							if (board.checkMill(color, currLoc)) {
+								System.out.println("Cannot remove this");
+							}
+							else {
+								removePieceGUI(color, currLoc);
+							}
 							event.consume();
 						}
 					});
@@ -421,7 +435,7 @@ public class GUI extends Application implements EventHandler<ActionEvent> {
 	
 	// disable or enables all pieces of specified color
 	public void disablePiece(boolean truth, String color) {
-		for (int i = 0; i < blackPieces.size(); i++) {
+		for (int i = 0; i < pieces; i++) {
 			if (color == "black") {
 				blackPieces.get(i).pieceImg.setDisable(truth);
 			}
