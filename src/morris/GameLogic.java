@@ -1,10 +1,4 @@
 package morris;
-import GUI.GUI;
-
-import java.util.List;
-import java.util.Set;
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class GameLogic {
 	enum Color {white, black}
