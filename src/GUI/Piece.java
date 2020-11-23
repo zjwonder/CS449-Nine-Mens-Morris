@@ -1,6 +1,13 @@
 package GUI;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.util.Pair;
 
 public class Piece extends GUI {
@@ -64,6 +71,50 @@ public class Piece extends GUI {
 	
 	/*********************misc functions*******************************************/
 	
+	@Override
+	public void handle(ActionEvent arg0) {
+		pieceImg.setOnMousePressed(new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent event) {
+				Pair<Integer, Integer> tempPair = new Pair<Integer, Integer>((int)pieceImg.getX(), (int)pieceImg.getY());
+    			// System.out.println(tempPair);
+				oldCoords = tempPair;
+			}
+		});
+		
+		
+	    pieceImg.setOnDragDetected(new EventHandler<MouseEvent>() {
+	        public void handle(MouseEvent event) {
+	            /* drag was detected, start a drag-and-drop gesture*/
+	            /* allow any transfer mode */
+	            Dragboard db = pieceImg.startDragAndDrop(TransferMode.ANY);
+	            /* Put a string on a dragboard */
+	            
+	            ClipboardContent content = new ClipboardContent();
+	            content.putImage(pieceImg.getImage());
+	            db.setContent(content);
+	            event.consume();
+	        }
+	    });
+	    
+	    pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
+	    	
+	    	public void handle(DragEvent event) {
+	    		if (event.getTransferMode() == TransferMode.MOVE) {
+	    			pieceImg.setImage(null);
+	    			//setLocation(refer, index);
+	    			//initPiece(refer.pieceClr, newCoords, index);
+	    			//deleteOldPiece(refer);
+	    			
+	    		}
+	    		if (successfulPlacement == true) {
+	    			
+	    			swapPlayers();
+	    			successfulPlacement = false;
+	    		}
+	}
+
+	});
+	}
 }
 
 

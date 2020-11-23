@@ -1,5 +1,7 @@
 package morris;
 
+import java.util.*;
+
 public class GameLogic {
 	enum Color {white, black}
 	

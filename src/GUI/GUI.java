@@ -45,6 +45,10 @@ public class GUI extends Application implements EventHandler<ActionEvent>{
 	Pair<Integer, Integer> newCoords;
 	Pair<Integer, Integer> oldCoords;
 	
+	boolean isWhiteTurn = true;
+	int currentPhase = 1;
+	boolean successfulPlacement = false;
+	
 	// number of pieces per player
 	final int pieces = 9;
 	
@@ -74,7 +78,7 @@ public class GUI extends Application implements EventHandler<ActionEvent>{
 	/****************Setters*******************************************************/
 	
 	public void setLocation(Piece refer, int index) {
-		board.placePiece(refer.pieceClr, index, findLoc(newCoords));
+		if (board.placePiece(refer.pieceClr, index, findLoc(newCoords)) == true) successfulPlacement = true;
 		refer.setCoords(newCoords);
 		refer.setPieceLoc(findLoc(newCoords));
 		refer.pieceImg.setX(newCoords.getKey());
@@ -111,7 +115,7 @@ public class GUI extends Application implements EventHandler<ActionEvent>{
 		createPieceList("white", whitePair);
 		createPieceList("black", blackPair);
 		
-		turnManager();
+		
 	
 		checkPieceLoc(stage);
 	}
@@ -275,14 +279,20 @@ public class GUI extends Application implements EventHandler<ActionEvent>{
 	    });
 	    
 	    refer.pieceImg.setOnDragDone(new EventHandler<DragEvent>() {
+	    	
 	    	public void handle(DragEvent event) {
 	    		if (event.getTransferMode() == TransferMode.MOVE) {
 	    			refer.pieceImg.setImage(null);
 	    			setLocation(refer, index);
 	    			initPiece(refer.pieceClr, newCoords, index);
 	    			deleteOldPiece(refer);
+	    			
 	    		}
-	    		if (refer.pieceClr == "white") {
+	    		if (successfulPlacement == true) {
+	    			swapPlayers();
+	    			successfulPlacement = false;
+	    		}
+	    		/*if (refer.pieceClr == "white") {
 	    			disablePieces(true, "white");
 	    			disablePieces(false, "black");
 	    		}
@@ -290,11 +300,52 @@ public class GUI extends Application implements EventHandler<ActionEvent>{
 	    		else {
 	    			disablePieces(false, "white");
 	    			disablePieces(true, "black");
-	    		}
+	    		}*/
 	    	}
 	    });
 	}	
 	
+	
+	public void swapPlayers() {
+		//System.out.println(isWhiteTurn);
+		if (isWhiteTurn==true) {
+			for (int i = 0; i<pieces; i++) {
+				blackPieces.get(i).pieceImg.setDisable(false);
+				whitePieces.get(i).pieceImg.setDisable(true);
+				isWhiteTurn=false;
+			}
+		}
+		else {
+			for (int i = 0; i<pieces; i++) {
+				blackPieces.get(i).pieceImg.setDisable(true);
+				whitePieces.get(i).pieceImg.setDisable(false);
+				isWhiteTurn = true;
+			}
+		}
+		currentPhase = PlayerPhase();
+	}
+	
+	
+	public int PlayerPhase() {
+		List<Integer> tempLocations = new ArrayList<Integer>();
+		int deletedPieces = 0;
+		if (isWhiteTurn==false) {
+			for (int i = 0; i<pieces; i++) {
+				tempLocations.add(blackPieces.get(i).getPieceLoc());
+				if (blackPieces.get(i).getPieceLoc() == -5) deletedPieces++;
+			}
+		}
+		else {
+			for (int i = 0; i<pieces; i++) {
+				tempLocations.add(whitePieces.get(i).getPieceLoc());
+				if (whitePieces.get(i).getPieceLoc() == -5) deletedPieces++;
+			}
+			
+		if (tempLocations.contains(-2)) return 1;
+		}
+		if (deletedPieces < pieces-3) return 2;
+		return 3;
+	}
 	
 	
 	public void choosePiece(String colorInPlay, String removeClr) {
