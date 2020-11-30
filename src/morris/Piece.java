@@ -31,6 +31,22 @@ public class Piece extends Button{
         setLayoutY(yCoord);
 		player = ePlayer.none;
 	}
+	
+	public Piece() {
+		setVisible(false);
+		pieceID = 0;
+		setStyle("-fx-border-color: transparent;"
+        		+ "-fx-border-width: 0;"
+        		+ "-fx-background-radius: 0;"
+        		+ "-fx-background-color: transparent;"
+        		+ "-fx-font-family:\"Segoe UI\", Helvetica, Arial, sans-serif;"
+        		+ "-fx-font-size: 1em; /* 12 */"
+        		+ "-fx-text-fill: #828282;");
+        setPrefSize(50, 50);
+        setLayoutX(0);
+        setLayoutY(0);
+		player = ePlayer.none;
+	}
 
 	
 	public void setCoords(int x, int y) {

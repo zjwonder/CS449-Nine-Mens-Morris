@@ -1,7 +1,7 @@
 package UnitTests;
 
 import morris.Board;
-import morris.GameLogic;
+
 
 
 public class TestCases {
@@ -20,7 +20,7 @@ public class TestCases {
 		
 	public void initializer() {
 		Board board = new Board(9);
-		GameLogic game = new GameLogic();
+		
 		TestCases autoTest = new TestCases();
 		System.out.println("\nInitializing automated tests...");
 		wait(500);
