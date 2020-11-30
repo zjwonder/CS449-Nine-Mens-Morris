@@ -271,7 +271,11 @@ public class Board {
 	// Reads a text file with all the valid spaces and their valid connections. This should also make different versions easier to implement.
 	public boolean readSpaces(int numPieces) {
 		File boardData;
-		if (numPieces == 6) boardData = new File("src\\game data\\6MM board.txt");
+		flyingAllowed = true;
+		if (numPieces == 6) {
+			boardData = new File("src\\game data\\6MM board.txt");
+			flyingAllowed = false;
+		}
 		else if (numPieces == 12) boardData = new File("src\\game data\\12MM board.txt");
 		else boardData = new File("src\\game data\\9MM board.txt");
 		try (Scanner scanner = new Scanner(boardData)) {
