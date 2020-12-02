@@ -29,9 +29,9 @@ import javafx.scene.shape.*;
 import javafx.scene.text.*;
 
 
-public class Main extends Application implements EventHandler<ActionEvent> {
+public class Main extends Application{
 	boolean isWhiteTurn, millFormed, winCondition, movingPiece, gameStarted = false;
-	int whitePhase, blackPhase, moveFromID, moveToID, numPieces, whiteWins, blackWins, gameTypeInt = 9;
+	int whitePhase, blackPhase, moveFromID, moveToID, numPieces = 9, whiteWins, blackWins;
 	Board board = new Board(9);
 	List<Piece> pieces = new ArrayList<Piece>();
 	Button startButton = new Button();
@@ -156,34 +156,11 @@ public class Main extends Application implements EventHandler<ActionEvent> {
      	pane.getChildren().add(blackInfo);
      	pane.getChildren().add(turnInfo);
     	
-     	//Creates all pieces
+     	
+     	// Create all pieces
     	Piece button1, button2, button3, button4, button5, button6, button7, button8, button9, 
 		button10, button11, button12, button13, button14, button15, button16, button17, button18, 
 		button19, button20, button21, button22, button23, button24;
-		/*button1 = new Piece(17, 142, 46); pieces.add(button1);
-		button2 = new Piece(47, 418, 46); pieces.add(button2);
-		button3 = new Piece(77,692,46); pieces.add(button3);
-		button4 = new Piece(26,227,131); pieces.add(button4);
-		button5 = new Piece(46,418,131); pieces.add(button5);
-		button6 = new Piece(66,605,131); pieces.add(button6);
-		button7 = new Piece(35,311,213); pieces.add(button7);
-		button8 = new Piece(45,418,213); pieces.add(button8);
-		button9 = new Piece(55,523,213); pieces.add(button9);
-		button10 = new Piece(14,142,320); pieces.add(button10);
-		button11 = new Piece(24,227,320); pieces.add(button11);
-		button12 = new Piece(34,311,320); pieces.add(button12);
-		button13 = new Piece(54,523,320); pieces.add(button13);
-		button14 = new Piece(64,605,320); pieces.add(button14);
-		button15 = new Piece(74,692,320); pieces.add(button15);
-		button16 = new Piece(33,311,427); pieces.add(button16);
-		button17 = new Piece(43,418,427); pieces.add(button17);
-		button18 = new Piece(53,523,427); pieces.add(button18);
-		button19 = new Piece(22,227,509); pieces.add(button19);
-		button20 = new Piece(42,418,509); pieces.add(button20);
-		button21 = new Piece(62,605,509); pieces.add(button21);
-		button22 = new Piece(11,142,594); pieces.add(button22);
-		button23 = new Piece(41,418,594); pieces.add(button23);
-		button24 = new Piece(71,692,594); pieces.add(button24);*/
 		
 		button1 = new Piece(); pieces.add(button1);
 		button2 = new Piece(); pieces.add(button2);
@@ -212,7 +189,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
 		
 		pane.getChildren().addAll(pieces);
      
-		//Shows window and start button
+		// Show window
         stage.setScene(startScene);
         stage.show();
         
@@ -221,7 +198,7 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         //EventHandler for start button
         startButton.setOnAction(e -> {
         		stage.setScene(boardScene);
-        		resetGame(gameTypeInt);
+        		resetGame(numPieces);
         		updateTurnInfo();
         		whiteText.setText(nameField1.getText());
         		blackText.setText(nameField2.getText());
@@ -262,10 +239,6 @@ public class Main extends Application implements EventHandler<ActionEvent> {
         button24.setOnAction(e->{SpaceButtonHandler(button24);});
         
         
-	}
-	
-	public void handle(ActionEvent ae) {
-		// remove this?
 	}
 	
 	//Function called by button1-24 event handler. This is essentially the turn manager.
