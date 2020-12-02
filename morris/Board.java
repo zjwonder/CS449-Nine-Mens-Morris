@@ -16,9 +16,7 @@ public class Board {
 	
 	//Keeps track of what spaces are connected to a given space
 	private HashMap<Integer, List<Integer>> connections = new HashMap<Integer, List<Integer>>(); 	
-	
-	private boolean flyingAllowed = true;
-	
+
 	//list of all spaces on the board
 	public List<Integer> spaces = new ArrayList<Integer>();
 	
@@ -35,12 +33,12 @@ public class Board {
 	
 	// This is a constructor that should make it easier to implement different versions of the game later on (e.g. 3/6/12 Men's Morris).
 	public Board(int numPieces){ 
-		readSpaces(numPieces);
+		readSpaces();
 		for (int i = 0; i < numPieces; i++) {
 			whitePieces.add(0);
 			blackPieces.add(0);
 		}
-		for (int space : spaces) System.out.println(space);
+		
 	}
 	
 	// Resets board to initial state
@@ -227,7 +225,7 @@ public class Board {
 			possibleMoves.removeAll(whitePieces);
 			possibleMoves.removeAll(blackPieces);
 		}
-		else if (phase == 3 && flyingAllowed) {
+		else if (phase == 3) {
 			possibleMoves.addAll(spaces);
 			possibleMoves.removeAll(whitePieces);
 			possibleMoves.removeAll(blackPieces);
@@ -269,21 +267,13 @@ public class Board {
 	}
 	
 	// Reads a text file with all the valid spaces and their valid connections. This should also make different versions easier to implement.
-	public boolean readSpaces(int numPieces) {
-		File boardData;
-		flyingAllowed = true;
-		if (numPieces == 6) {
-			boardData = new File("src\\game data\\6MM board.txt");
-			flyingAllowed = false;
-		}
-		else if (numPieces == 12) boardData = new File("src\\game data\\12MM board.txt");
-		else boardData = new File("src\\game data\\9MM board.txt");
-		try (Scanner scanner = new Scanner(boardData)) {
+	public boolean readSpaces() {
+		try (Scanner scanner = new Scanner(new File("src\\9MM Spaces.txt"))) {
 			int tempKey;
 			
 			Scanner nextLine;
 	
-			while (scanner.hasNext()) { // loops until end of file
+			while (scanner.hasNext()) { // Reads spaces and their connections
 				List<Integer> tempVals = new ArrayList<Integer>();
 				nextLine = new Scanner(scanner.nextLine()); // reads next line of file
 				tempKey = nextLine.nextInt(); // gets key from first integer in the line.
@@ -300,16 +290,18 @@ public class Board {
 				
 			}
 			
-			while (scanner.hasNext()) { // loops until end of file
+			while (scanner.hasNext()) { // reads valid mills
 				nextLine = new Scanner(scanner.nextLine());
+				
 				int[] tempMill = new int[3];
 				for (int i = 0; i < 3; i++) {
 					tempMill[i] = nextLine.nextInt();
 				}
 				mills.add(tempMill);
 				nextLine.close();
-			
 			}
+			
+
 		scanner.close();
 		return true;
 		} catch (Exception e) {
