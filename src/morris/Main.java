@@ -30,7 +30,7 @@ import javafx.scene.text.*;
 
 
 public class Main extends Application{
-	boolean isWhiteTurn, millFormed, winCondition, movingPiece, gameStarted = false;
+	boolean isWhiteTurn, millFormed, winCondition, movingPiece, gameStarted = false, aiActive = false;
 	int whitePhase, blackPhase, moveFromID, moveToID, numPieces = 9, whiteWins, blackWins;
 	Board board = new Board(9);
 	List<Piece> pieces = new ArrayList<Piece>();
@@ -210,6 +210,8 @@ public class Main extends Application{
         sixMorrisRB.setOnAction(e -> numPieces = 6);
         nineMorrisRB.setOnAction(e -> numPieces = 9);
         twelveMorrisRB.setOnAction(e -> numPieces = 12);
+        aiPlayerRB.setOnAction(e -> aiActive = true);
+        humanPlayerRB.setOnAction(e -> aiActive = false);
         
         
         //EventHandlers for buttons
