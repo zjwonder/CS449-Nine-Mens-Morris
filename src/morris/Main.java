@@ -29,7 +29,8 @@ import javafx.scene.shape.*;
 import javafx.scene.text.*;
 
 
-public class Main extends Application{
+public class Main extends Application {
+	
 	boolean isWhiteTurn, millFormed, winCondition, movingPiece, gameStarted = false, aiActive = false;
 	int whitePhase, blackPhase, moveFromID, moveToID, numPieces = 9, whiteWins, blackWins;
 	Board board = new Board(9);
@@ -46,6 +47,10 @@ public class Main extends Application{
 	Text whitePiecesRemaining = new Text(), blackPiecesRemaining = new Text(), whitePlayerPhase = new Text(), blackPlayerPhase = new Text(), tellWhenMillFormed = new Text(""), tellWhoseTurn = new Text(""), tellWhatToDo = new Text("");
 	Image startScreen = null, nineBG = new Image("file:src\\img\\nineMensMorris.png"),sixBG = new Image("file:src\\img\\sixMensMorris.png"),twelveBG = new Image("file:src\\img\\twelveMensMorris.png");
 	ImageView mv = new ImageView(startScreen);
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
 	
 	@Override
 	public void start(Stage stage) throws Exception{
@@ -114,7 +119,7 @@ public class Main extends Application{
     	
     	
     	// Setup Board Scene
-		Scene boardScene = new Scene(pane, 934,1024);
+		Scene boardScene = new Scene(pane, 934, 1024);
 		stage.setTitle("Nine Men's Morris"); 
     	stage.setResizable(false);			 
     	updateTurnInfo();
@@ -258,13 +263,13 @@ public class Main extends Application{
        				isWhiteTurn = !isWhiteTurn;
        				enablePieceToMoveFrom();
        			}
-       			
        		}
-       		}
+       	}
         	
       	//This is phase 1
     	else if (piece.isEmpty() && !piece.isDisable() && blackPhase == 1) {
-      		if (board.placePiece(isWhiteTurn, piece.getID()) == true) {
+      		
+    		if (board.placePiece(isWhiteTurn, piece.getID()) == true) {
        			piece.setPlayer(isWhiteTurn);
        			if (board.checkMill(isWhiteTurn, piece.getID()) == true) {
        				millFormed = true;
@@ -281,6 +286,33 @@ public class Main extends Application{
        			enablePieceToMoveFrom();
        		}
        	}
+      	
+      	// phase one AI branch
+      	if (aiActive && blackPhase == 1 && !isWhiteTurn) {
+      		List<Integer> temp = new ArrayList<Integer>();
+      		int index = board.AIplace(temp);
+      		Piece blackAI = pieces.get(index);
+      		if (blackAI.isEmpty() && !blackAI.isDisable() && blackPhase == 1) {
+      			blackAI.setPlayer(isWhiteTurn);
+      			board.placePiece(isWhiteTurn, board.spaces.get(index));
+      			if (board.checkMill(isWhiteTurn, blackAI.getID())) {
+      				index = board.AIchoose();
+      				pieces.get(index).clearPlayer();
+      				board.removePiece(isWhiteTurn, board.spaces.get(index));
+      				updatePhase(isWhiteTurn);
+      				isWhiteTurn = !isWhiteTurn;
+      			}
+      			else {
+      				isWhiteTurn = !isWhiteTurn;
+      			}
+      		}
+      		
+      		if (board.checkPhase(false) == 2 && millFormed == false) {
+       			whitePhase = 2;
+       			blackPhase = 2;
+       			enablePieceToMoveFrom();
+       		}
+      	}      	
         	
       	//Phase 2 and 3. Allows player to place a piece in a valid spot after picking a piece to move.
        	else if (piece.isEmpty() && !piece.isDisable() && movingPiece == true) {
@@ -315,7 +347,6 @@ public class Main extends Application{
       	updateTurnInfo();
     }
         
-	
 	//Enables the opponent's pieces. This is called after a mill is formed.
 	public void enablePiecesMillFormed() {
 		for (Piece piece: pieces) {
@@ -332,7 +363,6 @@ public class Main extends Application{
 			}
 		}
 	}
-	
 	
 	//Enables a player's pieces in phase 2 and 3 so they can select a piece to move
 	public void enablePieceToMoveFrom() {
@@ -433,7 +463,7 @@ public class Main extends Application{
 		}
 	}
 	
-	//Updates every message shown during gameplay. Called after every button press.
+	//Updates every message shown during game play. Called after every button press.
 	public void updateTurnInfo() {
 		whitePiecesRemaining.setText("Pieces remaining: " + board.whitePieces.size());
 		whitePlayerPhase.setText("Phase " + whitePhase);
@@ -517,8 +547,4 @@ public class Main extends Application{
 		}
 	}
 	
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
 }
