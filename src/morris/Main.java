@@ -245,7 +245,7 @@ public class Main extends Application {
         button23.setOnAction(e->{SpaceButtonHandler(button23);});
         button24.setOnAction(e->{SpaceButtonHandler(button24);});
         
-        
+        System.out.println(board.spaces);     
 	}
 	
 	//Function called by button1-24 event handler. This is essentially the turn manager.
@@ -285,37 +285,10 @@ public class Main extends Application {
        			blackPhase = 2;
        			enablePieceToMoveFrom();
        		}
-       	}
-      	
-      	// phase one AI branch
-      	if (aiActive && blackPhase == 1 && !isWhiteTurn) {
-      		List<Integer> temp = new ArrayList<Integer>();
-      		int index = board.AIplace(temp);
-      		Piece blackAI = pieces.get(index);
-      		if (blackAI.isEmpty() && !blackAI.isDisable() && blackPhase == 1) {
-      			blackAI.setPlayer(isWhiteTurn);
-      			board.placePiece(isWhiteTurn, board.spaces.get(index));
-      			if (board.checkMill(isWhiteTurn, blackAI.getID())) {
-      				index = board.AIchoose();
-      				pieces.get(index).clearPlayer();
-      				board.removePiece(isWhiteTurn, board.spaces.get(index));
-      				updatePhase(isWhiteTurn);
-      				isWhiteTurn = !isWhiteTurn;
-      			}
-      			else {
-      				isWhiteTurn = !isWhiteTurn;
-      			}
-      		}
-      		
-      		if (board.checkPhase(false) == 2 && millFormed == false) {
-       			whitePhase = 2;
-       			blackPhase = 2;
-       			enablePieceToMoveFrom();
-       		}
-      	}      	
+       	}    	
         	
       	//Phase 2 and 3. Allows player to place a piece in a valid spot after picking a piece to move.
-       	else if (piece.isEmpty() && !piece.isDisable() && movingPiece == true) {
+       	else if (piece.isEmpty() && !piece.isDisable() && movingPiece == true && isWhiteTurn == true) {
        		if (board.movePiece(isWhiteTurn, moveFromID, piece.getID()) == true) {
        			piece.setPlayer(isWhiteTurn);
        			if (board.checkMill(isWhiteTurn, piece.getID()) == true) {
@@ -345,8 +318,63 @@ public class Main extends Application {
        		piece.clearPlayer();
        	}
       	updateTurnInfo();
+      	
+   		if (aiActive && blackPhase == 1 && !isWhiteTurn) {
+   			AIphaseOne();
+   		}
+   		else if (aiActive && blackPhase > 1 && !isWhiteTurn) {
+   			AIphaseTwo();
+   		}
     }
-        
+	
+	public void AIphaseOne() {
+  		int index = board.AIplace();
+  		Piece blackAI = pieces.get(index);
+  		System.out.print(blackAI.getID() + ", ");
+  		if (blackAI.isEmpty() && !blackAI.isDisable() && blackPhase == 1) {
+  			blackAI.setPlayer(isWhiteTurn);
+  			board.placePiece(isWhiteTurn, board.spaces.get(index));
+  			if (board.checkMill(isWhiteTurn, blackAI.getID())) {
+  				index = board.AIchoose();
+  				pieces.get(index).clearPlayer();
+  				board.removePiece(isWhiteTurn, board.spaces.get(index));
+  				updatePhase(isWhiteTurn);
+  				isWhiteTurn = !isWhiteTurn;
+  			}
+  			else {
+  				isWhiteTurn = !isWhiteTurn;
+  			}
+  		}
+  		
+  		if (board.checkPhase(false) == 2 && millFormed == false) {
+   			whitePhase = 2;
+   			blackPhase = 2;
+   			enablePieceToMoveFrom();
+   		}
+	}
+   
+	public void AIphaseTwo() {
+  		System.out.println("AI phase 2 entered\nisWhiteTurn = " + isWhiteTurn);
+  		int pieceIndex = board.AIpiece(); System.out.println("pieceIndex = " + pieceIndex + "  location = " + board.spaces.get(pieceIndex)); 
+  		int spaceIndex = board.AImove(pieceIndex, blackPhase); System.out.println("spaceIndex = " + spaceIndex  + "  location = " + board.spaces.get(spaceIndex));
+  		if (!pieces.get(spaceIndex).isEmpty() && !pieces.get(spaceIndex).isDisable()) {
+  			pieces.get(pieceIndex).clearPlayer();
+  			pieces.get(spaceIndex).setPlayer(isWhiteTurn);
+  			board.movePiece(isWhiteTurn, board.spaces.get(pieceIndex), board.spaces.get(spaceIndex));
+  			if (board.checkMill(isWhiteTurn, board.spaces.get(spaceIndex))) {
+  				pieceIndex = board.AIchoose();
+  				pieces.get(pieceIndex).clearPlayer();
+  				board.removePiece(isWhiteTurn, board.spaces.get(pieceIndex));
+  				updatePhase(isWhiteTurn);
+  				isWhiteTurn = !isWhiteTurn;
+  			}
+  			else {
+  				isWhiteTurn = !isWhiteTurn;
+  			}
+  			enablePieceToMoveFrom();
+  		}
+	}
+	
 	//Enables the opponent's pieces. This is called after a mill is formed.
 	public void enablePiecesMillFormed() {
 		for (Piece piece: pieces) {

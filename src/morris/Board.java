@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
@@ -39,7 +40,7 @@ public class Board {
 			whitePieces.add(0);
 			blackPieces.add(0);
 		}
-		for (int space : spaces) System.out.println(space);
+		//for (int space : spaces) System.out.println(space);
 	}
 	
 	// Resets board to initial state
@@ -317,7 +318,13 @@ public class Board {
 	
 	
 	// randomly generates a location to place a piece
-	public int AIplace(List<Integer> notAvail) {
+	public int AIplace() {
+//		for (int i = 0; i < spaces.size(); i++) {
+//			if (checkMill(false, spaces.get(i))) {
+//				System.out.println("i = " + i + "  location = " + spaces.get(i));
+//				return i;
+//			}
+//		}
 		Random rand = new Random();
 		int index = rand.nextInt(1000) % spaces.size();
 		while (!spaceAvailable(spaces.get(index))) {
@@ -336,8 +343,6 @@ public class Board {
 		return index;
 	}
 	
-	
-	
 	// method determines what phase the AI player is currently in
 	public void AIphase(boolean isWhiteTurn) {
 		if (blackPieces.size() > 3) {
@@ -347,6 +352,42 @@ public class Board {
 			AIfly(isWhiteTurn);
 		}
 	}
+	
+	// method random picks a piece to move, returns its index
+	public int AIpiece() {
+		Random rand = new Random();
+		int index = rand.nextInt(1000) % blackPieces.size();
+		Set<Integer> moves = getPossibleMoves(blackPieces.get(index), 2);
+		
+		while (moves.size() <= 0) {
+			index = rand.nextInt(1000) % blackPieces.size();
+			moves = getPossibleMoves(blackPieces.get(index), 2);
+		}
+		
+		index = spaces.indexOf(blackPieces.get(index));
+		return index;
+	}
+	
+	//
+	public int AImove(int pieceIndex, int blackPhase) {
+		Random rand = new Random();
+		Set<Integer> moves = getPossibleMoves(spaces.get(pieceIndex), blackPhase);
+//		System.out.println("pieceIndex = " + pieceIndex + "  moves = " + moves);
+		int index = rand.nextInt(1000) % moves.size();		
+		
+		int counter = 0;
+		int temp = 0;
+		Iterator<Integer> ite = moves.iterator();
+		while (ite.hasNext()) {
+			counter++;
+			if (counter == index) {
+				temp = (int) ite.next();
+			}
+		}
+		index = spaces.indexOf(temp);
+		return index;
+	}
+	
 	
 	// method simulates phase 2 moving
 	public void AImove(boolean isWhiteTurn) {
