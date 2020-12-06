@@ -207,10 +207,13 @@ public class Board {
 		piecesRemaining = playerPieces.size();
 		// phase 1
 		if (playerPieces.contains(0)) return 1;
+		
 		// phase 3
 		if (piecesRemaining == 3) return 3;
+		
 		// Given player has lost
 		if ( piecesRemaining == 2) return 0;
+		
 		// phase 2
 		else return 2;
 	}
@@ -342,26 +345,16 @@ public class Board {
 		}
 		return index;
 	}
-	
-	// method determines what phase the AI player is currently in
-	public void AIphase(boolean isWhiteTurn) {
-		if (blackPieces.size() > 3) {
-			AImove(isWhiteTurn);
-		}
-		else {
-			AIfly(isWhiteTurn);
-		}
-	}
-	
+		
 	// method random picks a piece to move, returns its index
-	public int AIpiece() {
+	public int AIpiece(int blackPhase) {
 		Random rand = new Random();
 		int index = rand.nextInt(1000) % blackPieces.size();
-		Set<Integer> moves = getPossibleMoves(blackPieces.get(index), 2);
+		Set<Integer> moves = getPossibleMoves(blackPieces.get(index), blackPhase);
 		
 		while (moves.size() <= 0) {
 			index = rand.nextInt(1000) % blackPieces.size();
-			moves = getPossibleMoves(blackPieces.get(index), 2);
+			moves = getPossibleMoves(blackPieces.get(index), blackPhase);
 		}
 		
 		index = spaces.indexOf(blackPieces.get(index));
@@ -387,42 +380,4 @@ public class Board {
 		index = spaces.indexOf(temp);
 		return index;
 	}
-	
-	
-	// method simulates phase 2 moving
-	public void AImove(boolean isWhiteTurn) {
-		// randomly choosing a piece to move
-		Random rand = new Random();
-		int position = rand.nextInt(1000) % (blackPieces.size());
-		position = blackPieces.get(position);
-		
-		List <Integer> adjacent = new ArrayList<Integer>();
-		adjacent = connections.get(position);
-		
-		System.out.println("Position = " + position);
-		System.out.println("Adjacent = " + adjacent);
-
-		int newPos = rand.nextInt(1000) % adjacent.size();
-		
-		if (spaceAvailable(newPos)) {
-			movePiece(isWhiteTurn, position, newPos);
-		}
-		else 
-			AImove(isWhiteTurn);
-	}
-	
-	// method simulates phase 3 flying
-	public void AIfly(boolean isWhiteTurn) {
-		Random rand = new Random();
-		int position = rand.nextInt(1000) % (spaces.size());
-		position = spaces.get(position);
-		
-		if (spaceAvailable(position)) {
-			placePiece(isWhiteTurn, position);
-		}
-		else AIfly(isWhiteTurn);
-	}
-	
-
-
 }

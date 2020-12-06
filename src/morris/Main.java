@@ -316,21 +316,20 @@ public class Main extends Application {
        		}
        		movingPiece = true;
        		piece.clearPlayer();
-       	}
-      	updateTurnInfo();
-      	
+       	}      	
    		if (aiActive && blackPhase == 1 && !isWhiteTurn) {
    			AIphaseOne();
    		}
    		else if (aiActive && blackPhase > 1 && !isWhiteTurn) {
-   			AIphaseTwo();
+   			AIphaseTwoThree();
    		}
+      	updateTurnInfo();
     }
 	
 	public void AIphaseOne() {
   		int index = board.AIplace();
   		Piece blackAI = pieces.get(index);
-  		System.out.print(blackAI.getID() + ", ");
+  		//System.out.print(blackAI.getID() + ", ");
   		if (blackAI.isEmpty() && !blackAI.isDisable() && blackPhase == 1) {
   			blackAI.setPlayer(isWhiteTurn);
   			board.placePiece(isWhiteTurn, board.spaces.get(index));
@@ -353,11 +352,12 @@ public class Main extends Application {
    		}
 	}
    
-	public void AIphaseTwo() {
+	public void AIphaseTwoThree() {
   		System.out.println("AI phase 2 entered\nisWhiteTurn = " + isWhiteTurn);
-  		int pieceIndex = board.AIpiece(); System.out.println("pieceIndex = " + pieceIndex + "  location = " + board.spaces.get(pieceIndex)); 
+  		int pieceIndex = board.AIpiece(blackPhase); System.out.println("pieceIndex = " + pieceIndex + "  location = " + board.spaces.get(pieceIndex)); 
   		int spaceIndex = board.AImove(pieceIndex, blackPhase); System.out.println("spaceIndex = " + spaceIndex  + "  location = " + board.spaces.get(spaceIndex));
-  		if (!pieces.get(spaceIndex).isEmpty() && !pieces.get(spaceIndex).isDisable()) {
+  		
+  		if (pieces.get(spaceIndex).isEmpty()) {
   			pieces.get(pieceIndex).clearPlayer();
   			pieces.get(spaceIndex).setPlayer(isWhiteTurn);
   			board.movePiece(isWhiteTurn, board.spaces.get(pieceIndex), board.spaces.get(spaceIndex));
