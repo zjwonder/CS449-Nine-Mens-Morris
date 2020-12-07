@@ -1,15 +1,15 @@
 package morris;
 
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import javafx.util.Pair;
+
 
 
 public class Board {
@@ -40,7 +40,7 @@ public class Board {
 			whitePieces.add(0);
 			blackPieces.add(0);
 		}
-		//for (int space : spaces) System.out.println(space);
+		for (int space : spaces) System.out.println(space);
 	}
 	
 	// Resets board to initial state
@@ -112,7 +112,8 @@ public class Board {
 			}
 		}
 	}
-		
+	
+	
 	//Places piece on game board and updates back end code
 	public boolean placePiece(boolean isWhiteTurn, int space) {
 		if (connections.containsKey(space) == false) {
@@ -135,7 +136,8 @@ public class Board {
 		if (whitePieces.contains(space) == true || blackPieces.contains(space) == true) return false;
 		return true;
 	}
-		
+	
+	
 	//Moves piece if move is valid and updates back end code
 	public boolean movePiece(boolean isWhiteTurn, int oldSpace, int newSpace) { // relocate piece
 		List<Integer> playerPieces = new ArrayList<Integer>();
@@ -162,7 +164,8 @@ public class Board {
         }
         return false;
     }
-		
+	
+	
 	//Checks if a given piece formed a mill
 	public boolean checkMill(boolean isWhiteTurn, Integer newSpace) {
         List<Integer> tempPieces = new ArrayList<Integer>();
@@ -197,7 +200,8 @@ public class Board {
         }
         return true;
 	}
-		
+	
+	
 	//Checks what phase a given player is in. Also functions as a win check.
 	public int checkPhase(boolean isWhiteTurn) {
 		int piecesRemaining;
@@ -207,13 +211,10 @@ public class Board {
 		piecesRemaining = playerPieces.size();
 		// phase 1
 		if (playerPieces.contains(0)) return 1;
-		
 		// phase 3
 		if (piecesRemaining == 3) return 3;
-		
 		// Given player has lost
 		if ( piecesRemaining == 2) return 0;
-		
 		// phase 2
 		else return 2;
 	}
@@ -315,69 +316,5 @@ public class Board {
 			System.err.println("something broke");
 			return false;
 		}
-	}
-
-	/****************************************** AI Player ******************************************/
-	
-	
-	// randomly generates a location to place a piece
-	public int AIplace() {
-//		for (int i = 0; i < spaces.size(); i++) {
-//			if (checkMill(false, spaces.get(i))) {
-//				System.out.println("i = " + i + "  location = " + spaces.get(i));
-//				return i;
-//			}
-//		}
-		Random rand = new Random();
-		int index = rand.nextInt(1000) % spaces.size();
-		while (!spaceAvailable(spaces.get(index))) {
-			index = rand.nextInt(1000) % spaces.size();
-		}
-		return index;
-	}
-	
-	// randomly chooses a white piece to remove when the AI creates a mill
-	public int AIchoose() {
-		Random rand = new Random();
-		int index = rand.nextInt(1000) % whitePieces.size();
-		while (!whitePieces.contains(spaces.get(index)) && !checkMill(true, spaces.get(index))) {
-			index = rand.nextInt(1000) % whitePieces.size();
-		}
-		return index;
-	}
-		
-	// method random picks a piece to move, returns its index
-	public int AIpiece(int blackPhase) {
-		Random rand = new Random();
-		int index = rand.nextInt(1000) % blackPieces.size();
-		Set<Integer> moves = getPossibleMoves(blackPieces.get(index), blackPhase);
-		
-		while (moves.size() <= 0) {
-			index = rand.nextInt(1000) % blackPieces.size();
-			moves = getPossibleMoves(blackPieces.get(index), blackPhase);
-		}
-		
-		index = spaces.indexOf(blackPieces.get(index));
-		return index;
-	}
-	
-	//
-	public int AImove(int pieceIndex, int blackPhase) {
-		Random rand = new Random();
-		Set<Integer> moves = getPossibleMoves(spaces.get(pieceIndex), blackPhase);
-//		System.out.println("pieceIndex = " + pieceIndex + "  moves = " + moves);
-		int index = rand.nextInt(1000) % moves.size();		
-		
-		int counter = 0;
-		int temp = 0;
-		Iterator<Integer> ite = moves.iterator();
-		while (ite.hasNext()) {
-			counter++;
-			if (counter == index) {
-				temp = (int) ite.next();
-			}
-		}
-		index = spaces.indexOf(temp);
-		return index;
 	}
 }
