@@ -307,11 +307,14 @@ public class Board {
 	
 	// randomly chooses a white piece to remove when the AI creates a mill
 	public int AIchoose() {
+		System.out.println("running");
 		Random rand = new Random();
-		int index = rand.nextInt(1000) % whitePieces.size();
-		while (whitePieces.contains(spaces.get(index)) && !checkMill(true, spaces.get(index))) {
+		int index = rand.nextInt(1000) % whitePieces.size(); 
+		
+		while (!whitePieces.contains(spaces.get(index)) || checkMill(true, spaces.get(index))) {
 			index = rand.nextInt(1000) % whitePieces.size();
 		}
+		System.out.println(index + " position: " + spaces.get(index));
 		return index;
 	}
 		

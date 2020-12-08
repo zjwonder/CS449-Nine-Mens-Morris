@@ -417,6 +417,7 @@ public class Main extends Application {
   		if (blackAI.isEmpty() && !blackAI.isDisable() && blackPhase == 1) {
   			blackAI.setPlayer(isWhiteTurn);
   			board.placePiece(isWhiteTurn, board.spaces.get(index));
+  			System.out.println("AI phase one : " + board.checkMill(isWhiteTurn, blackAI.getID()));
   			if (board.checkMill(isWhiteTurn, blackAI.getID())) {
   				index = board.AIchoose();
   				pieces.get(index).clearPlayer();
@@ -446,6 +447,7 @@ public class Main extends Application {
   			pieces.get(pieceIndex).clearPlayer();
   			pieces.get(spaceIndex).setPlayer(isWhiteTurn);
   			board.movePiece(isWhiteTurn, board.spaces.get(pieceIndex), board.spaces.get(spaceIndex));
+  			System.out.println("AI phase two : " + board.checkMill(isWhiteTurn, board.spaces.get(spaceIndex)));
   			if (board.checkMill(isWhiteTurn, board.spaces.get(spaceIndex))) {
   				pieceIndex = board.AIchoose();
   				pieces.get(pieceIndex).clearPlayer();
