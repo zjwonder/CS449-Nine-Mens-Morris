@@ -1,7 +1,6 @@
 package morris;
 
-	
-import java.awt.GraphicsEnvironment;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import javafx.application.*;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -16,26 +16,39 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 
 
 public class Main extends Application {
 	
 	boolean isWhiteTurn, millFormed, winCondition, movingPiece, gameStarted = false, aiActive = false;
-	int whitePhase, blackPhase, moveFromID, moveToID, numPieces = 9, whiteWins, blackWins;
+	int whitePhase, blackPhase, moveFromID, moveToID, numPieces = 9, whiteWins = 0, blackWins = 0;
 	Board board = new Board(9);
 	List<Piece> pieces = new ArrayList<Piece>();
+	String defFontName = "Bodoni MT", 
+			infoStyle = "-fx-background-color: #fff0c1;-fx-padding: 4;-fx-border-style: solid inside;"
+			+ "-fx-border-width: 3;-fx-border-color: white;";
+	Font defaultFont = Font.font(defFontName, 16);
 	Button startButton = new Button(), resetButton = new Button();
-	RadioButton sixMorrisRB = new RadioButton(), nineMorrisRB = new RadioButton(), twelveMorrisRB = new RadioButton(), aiPlayerRB = new RadioButton(), humanPlayerRB = new RadioButton();
+	RadioButton sixMorrisRB = new RadioButton(), aiPlayerRB = new RadioButton(), 
+			humanPlayerRB = new RadioButton(), nineMorrisRB = new RadioButton(), twelveMorrisRB = new RadioButton();
 	ToggleGroup gameType = new ToggleGroup(), playerTypeChoice = new ToggleGroup();
 	Label fieldLabel1 = new Label(), fieldLabel2 = new Label();
 	TextField nameField1 = new TextField("White"), nameField2 = new TextField("Black");
-	Pane pane = new Pane();
-	VBox whiteInfo = new VBox(), blackInfo = new VBox(), turnInfo = new VBox(), startInfo = new VBox();
-	HBox playerLabelHBox1 = new HBox(),  playerLabelHBox2 = new HBox(), gameTypeHBox = new HBox(), playerTypeHBox = new HBox();
-	Text welcomeTitle = new Text(),  welcomeSubtitle = new Text(), creditText = new Text(), whiteText = new Text("White"), blackText = new Text("Black");
-	Text whitePiecesRemaining = new Text(), blackPiecesRemaining = new Text(), whitePlayerPhase = new Text(), blackPlayerPhase = new Text(), tellWhenMillFormed = new Text(""), tellWhoseTurn = new Text(""), tellWhatToDo = new Text(""), whiteFlyingAllowed = new Text(), blackFlyingAllowed = new Text();
-	Image startScreen = null, nineBG = new Image("file:src\\img\\nineMensMorris.png"),sixBG = new Image("file:src\\img\\sixMensMorris.png"),twelveBG = new Image("file:src\\img\\twelveMensMorris.png");
+	BorderPane startPane = new BorderPane();
+	Pane boardPane = new Pane();
+	VBox whiteInfo = new VBox(), blackInfo = new VBox(), turnInfo = new VBox(), 
+			centerVBox = new VBox(), leftVBox = new VBox(), rightVBox = new VBox(), bottomVBox = new VBox();
+	HBox playerLabelHBox1 = new HBox(),  playerLabelHBox2 = new HBox(), gameTypeHBox = new HBox(), 
+			playerTypeHBox = new HBox(), titleHBox = new HBox(), creditHBox = new HBox(), startBtnHBox = new HBox(), subtitleHBox;
+	Text welcomeTitle = new Text(), creditText = new Text(), whiteText = new Text("White"), blackText = new Text("Black"), 
+			whitePiecesRemaining = new Text(), blackPiecesRemaining = new Text(), whitePlayerPhase = new Text(), blackPlayerPhase = new Text(), 
+			tellWhenMillFormed = new Text(""), tellWhoseTurn = new Text(""), tellWhatToDo = new Text(""), whiteFlyingAllowed = new Text(), 
+			blackFlyingAllowed = new Text(), blackWinsText = new Text(), whiteWinsText = new Text();
+	Image startScreen = null, nineBG = new Image("file:src\\img\\nineMensMorris.png"),
+			sixBG = new Image("file:src\\img\\sixMensMorris.png"),
+			twelveBG = new Image("file:src\\img\\twelveMensMorris.png");
 	ImageView mv = new ImageView(startScreen);
 	
 	public static void main(String[] args) {
@@ -45,122 +58,173 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception{
 				
-		// Setup Stage
-		//stage.setTitle("Nine Men's Morris"); 
+		// Setup Stage 
     	stage.setResizable(false);
     	
     	// Setup Start Scene
-    	Scene startScene = new Scene(startInfo, 500, 500);
-    	startInfo.getChildren().addAll(welcomeTitle, welcomeSubtitle, playerLabelHBox1, playerLabelHBox2, gameTypeHBox, playerTypeHBox, startButton, creditText);
-    	startInfo.setSpacing(40);
+    	Scene startScene = new Scene(startPane, 650, 750);
+    	startPane.setTop(titleHBox);
+    	startPane.setCenter(centerVBox);
+    	startPane.setBottom(bottomVBox);
+    	startPane.setLeft(leftVBox);
+    	startPane.setRight(rightVBox);
+    	startPane.setStyle("-fx-background-color: linear-gradient(from 0% 10% to 0% 90%, #95a2b8, #172c42)");
     	
     	// Define start button
-    	startButton.setText("START");
+    	startButton.setPrefHeight(40);
+    	startButton.setPrefWidth(240);
+    	startButton.setText("Start Match");
 		startButton.setTextAlignment(TextAlignment.CENTER);
 		startButton.setAlignment(Pos.CENTER);
+		startButton.setFont(Font.font(defFontName, 20));
 		startButton.setDisable(false);
 		startButton.setVisible(true);
 		
-		resetButton.setText("RESTART");
-		resetButton.setLayoutX(500);
-		resetButton.setLayoutY(500);
+		resetButton.setText("Play Again");
+		resetButton.setLayoutX(417);
+		resetButton.setLayoutY(540);
+		resetButton.setPrefHeight(40);
+    	resetButton.setPrefWidth(100);
 		resetButton.setTextAlignment(TextAlignment.CENTER);
+		resetButton.setFont(defaultFont);
 		resetButton.setDisable(true);
 		resetButton.setVisible(false);
 		
 		// Define radio controls for game type
 		sixMorrisRB.setText("Six Men's Morris");
 		sixMorrisRB.setToggleGroup(gameType);
+		sixMorrisRB.setFont(defaultFont);
+		sixMorrisRB.setTextFill(Color.WHITE);
 		nineMorrisRB.setText("Nine Men's Morris");
 		nineMorrisRB.setToggleGroup(gameType);
+		nineMorrisRB.setFont(defaultFont);
+		nineMorrisRB.setSelected(true);
+		nineMorrisRB.setTextFill(Color.WHITE);
 		twelveMorrisRB.setText("Twelve Men's Morris");
 		twelveMorrisRB.setToggleGroup(gameType);
+		twelveMorrisRB.setFont(defaultFont);
+		twelveMorrisRB.setTextFill(Color.WHITE);
 		
 		// Define radio controls for AI choice
-		aiPlayerRB.setText("Play against AI");
+		aiPlayerRB.setText("Human vs. Computer");
 		aiPlayerRB.setToggleGroup(playerTypeChoice);
-		humanPlayerRB.setText("Play against human");
+		aiPlayerRB.setFont(defaultFont);
+		aiPlayerRB.setTextFill(Color.WHITE);
+		humanPlayerRB.setText("Human vs. Human");
 		humanPlayerRB.setToggleGroup(playerTypeChoice);
+		humanPlayerRB.setSelected(true);
+		humanPlayerRB.setFont(defaultFont);
+		humanPlayerRB.setTextFill(Color.WHITE);
 		
 		// Define Text fields and labels
     	fieldLabel1.setText("Player 1 Name (White Pieces):");
-    	fieldLabel1.setMinWidth(160);
+    	fieldLabel1.setMinWidth(200);
+    	fieldLabel1.setFont(defaultFont);
+    	fieldLabel1.setTextFill(Color.WHITE);
     	fieldLabel2.setText("Player 2 Name (Black Pieces):");
-    	fieldLabel2.setMinWidth(160);
+    	fieldLabel2.setMinWidth(200);
+    	fieldLabel2.setFont(defaultFont);
+    	fieldLabel2.setTextFill(Color.WHITE);
     	
     	nameField1.setPrefWidth(160);
-    	nameField1.setAlignment(Pos.CENTER_RIGHT);
+    	nameField1.setAlignment(Pos.CENTER_LEFT);
     	nameField2.setPrefWidth(160);
-    	nameField2.setAlignment(Pos.CENTER_RIGHT);
+    	nameField2.setAlignment(Pos.CENTER_LEFT);
     	
     	// Define misc text
-    	welcomeTitle.setText("Welcome to Morris!");
+    	welcomeTitle.setText("A Game of Morris");
     	welcomeTitle.setTextAlignment(TextAlignment.CENTER);
-    	welcomeSubtitle.setText("Choose your game settings and then click start");
-    	welcomeSubtitle.setTextAlignment(TextAlignment.CENTER);
+    	welcomeTitle.setFont(Font.font("Algerian", FontWeight.BOLD, 42));
+    	welcomeTitle.setStyle("-fx-background-color: #172c42");;
     	creditText.setText("by Group Thirteen Dev Team");
     	creditText.setTextAlignment(TextAlignment.RIGHT);
+    	creditText.setFill(Color.WHITE);
+    	creditText.setFont(Font.font(defFontName, FontPosture.ITALIC, 15));
     	
-    	// Define height boxes
+    	// Define horizontal boxes
     	playerLabelHBox1.getChildren().addAll(fieldLabel1, nameField1);
-    	playerLabelHBox1.setPrefWidth(350);
     	playerLabelHBox1.setAlignment(Pos.CENTER);
-    	playerLabelHBox1.setSpacing(20);
+    	playerLabelHBox1.setSpacing(80);
     	playerLabelHBox2.getChildren().addAll(fieldLabel2, nameField2);
     	playerLabelHBox2.setPrefWidth(350);
     	playerLabelHBox2.setAlignment(Pos.CENTER);
-    	playerLabelHBox2.setSpacing(20);
+    	playerLabelHBox2.setSpacing(80);
     	gameTypeHBox.getChildren().addAll(sixMorrisRB, nineMorrisRB, twelveMorrisRB);
     	gameTypeHBox.setSpacing(20);
+    	gameTypeHBox.setAlignment(Pos.CENTER);
     	playerTypeHBox.getChildren().addAll(humanPlayerRB, aiPlayerRB);
+    	playerTypeHBox.setSpacing(20);
+    	playerTypeHBox.setAlignment(Pos.CENTER);
+    	titleHBox.getChildren().add(welcomeTitle);
+    	titleHBox.setPadding(new Insets(40, 40, 0, 40));
+    	titleHBox.setAlignment(Pos.CENTER);
+    	startBtnHBox.getChildren().add(startButton);
+    	startBtnHBox.setAlignment(Pos.CENTER);
+    	
+    	// Define vertical boxes
+    	centerVBox.getChildren().addAll(playerLabelHBox1, playerLabelHBox2, playerTypeHBox, gameTypeHBox, startBtnHBox);
+    	centerVBox.setSpacing(60);
+    	centerVBox.setAlignment(Pos.CENTER);
+    	leftVBox.setPrefWidth(40);
+    	rightVBox.setPrefWidth(40);
+    	bottomVBox.getChildren().add(creditText);
+    	bottomVBox.setPadding(new Insets(20, 20, 20, 20));
+    	bottomVBox.setAlignment(Pos.CENTER);
     	
     	
     	// Setup Board Scene
-		Scene boardScene = new Scene(pane, 934, 1024);
+		Scene boardScene = new Scene(boardPane, 934, 1024);
 		stage.setTitle("Nine Men's Morris"); 
     	stage.setResizable(false);			 
     	updateTurnInfo();
     	
-//        tellWhenMillFormed.setFont(new Font("Algerian", 20));  
-//        tellWhoseTurn.setFont(new Font("Algerian", 20)); 
-//        tellWhatToDo.setFont(new Font("Algerian", 20)); 
+        tellWhenMillFormed.setFont(Font.font(defFontName, 20));  
+        tellWhoseTurn.setFont(Font.font(defFontName, 20)); 
+        tellWhatToDo.setFont(Font.font(defFontName, 20)); 
 
         tellWhenMillFormed.setTextAlignment(TextAlignment.CENTER);
         tellWhoseTurn.setTextAlignment(TextAlignment.CENTER);
         tellWhatToDo.setTextAlignment(TextAlignment.CENTER);
         
     	whiteInfo.setAlignment(Pos.CENTER);
-    	whiteInfo.setSpacing(10);
-    	whiteInfo.setLayoutX(50);
-    	whiteInfo.setLayoutY(25);
-    	whiteInfo.getChildren().add(whiteText); whiteText.setFont(new Font("Algerian", 20));
-    	whiteInfo.getChildren().add(whitePiecesRemaining); whitePiecesRemaining.setFont(new Font("Algerian", 20));
-    	whiteInfo.getChildren().add(whitePlayerPhase); whitePlayerPhase.setFont(new Font("Algerian", 20));
-    	whiteInfo.getChildren().add(whiteFlyingAllowed); whiteFlyingAllowed.setFont(new Font("Algerian", 20));
+    	whiteInfo.setSpacing(2);
+    	whiteInfo.setLayoutX(95);
+    	whiteInfo.setLayoutY(15);
+    	whiteInfo.setStyle(infoStyle);
+    	whiteInfo.setPrefWidth(160);
+    	whiteInfo.getChildren().addAll(whiteText, whiteWinsText, whitePiecesRemaining, whitePlayerPhase, whiteFlyingAllowed); 
+    	whiteText.setFont(defaultFont);
+    	whiteWinsText.setFont(defaultFont);
+    	whitePiecesRemaining.setFont(defaultFont);
+    	whitePlayerPhase.setFont(defaultFont);
+    	whiteFlyingAllowed.setFont(defaultFont);
     	
     	blackInfo.setAlignment(Pos.CENTER);
-    	blackInfo.setSpacing(10);
-    	blackInfo.setLayoutX(670);
-    	blackInfo.setLayoutY(25);
-    	blackInfo.getChildren().add(blackText); blackText.setFont(new Font("Algerian", 20));
-    	blackInfo.getChildren().add(blackPiecesRemaining); blackPiecesRemaining.setFont(new Font("Algerian", 20));
-    	blackInfo.getChildren().add(blackPlayerPhase); blackPlayerPhase.setFont(new Font("Algerian", 20));
-    	blackInfo.getChildren().add(blackFlyingAllowed); blackFlyingAllowed.setFont(new Font("Algerian", 20));
+    	blackInfo.setSpacing(2);
+    	blackInfo.setLayoutX(680);
+    	blackInfo.setLayoutY(15);
+    	blackInfo.setStyle(infoStyle);
+    	blackInfo.setPrefWidth(160);
+    	blackInfo.getChildren().addAll(blackText, blackWinsText, blackPiecesRemaining, blackPlayerPhase, blackFlyingAllowed); 
+    	blackText.setFont(defaultFont);
+    	blackWinsText.setFont(defaultFont);
+    	blackPiecesRemaining.setFont(defaultFont);
+    	blackPlayerPhase.setFont(defaultFont);
+    	blackFlyingAllowed.setFont(defaultFont);
     	
     	turnInfo.setAlignment(Pos.CENTER);
-    	turnInfo.setSpacing(10);
-    	turnInfo.setLayoutX(393);
-    	turnInfo.setLayoutY(25);
-    	turnInfo.getChildren().add(tellWhoseTurn);
-    	turnInfo.getChildren().add(tellWhenMillFormed);
-    	turnInfo.getChildren().add(tellWhatToDo);
+    	turnInfo.setSpacing(2);
+    	turnInfo.setLayoutX(330);
+    	turnInfo.setLayoutY(15);
+    	turnInfo.setStyle(infoStyle);
+    	turnInfo.setPrefWidth(280);
+    	turnInfo.setPrefHeight(120);
+    	turnInfo.getChildren().addAll(tellWhoseTurn, tellWhenMillFormed, tellWhatToDo);
     	
      	mv.setX(50); mv.setY(150);
-     	pane.getChildren().add(mv);
-     	pane.getChildren().add(whiteInfo);
-     	pane.getChildren().add(blackInfo);
-     	pane.getChildren().add(turnInfo);
-     	pane.getChildren().add(resetButton);
+     	boardPane.getChildren().addAll(whiteInfo, turnInfo, blackInfo, mv, resetButton);
+     	boardPane.setStyle("-fx-background-color: linear-gradient(from 0% 10% to 0% 90%, #95a2b8, #172c42)");
+
      	
      	// Create all pieces
     	Piece button1, button2, button3, button4, button5, button6, button7, button8, button9, 
@@ -192,7 +256,7 @@ public class Main extends Application {
 		button23 = new Piece(); pieces.add(button23);
 		button24 = new Piece(); pieces.add(button24);
 		
-		pane.getChildren().addAll(pieces);
+		boardPane.getChildren().addAll(pieces);
      
 		// Show window
         stage.setScene(startScene);
@@ -207,6 +271,8 @@ public class Main extends Application {
         		updateTurnInfo();
         		whiteText.setText(nameField1.getText());
         		blackText.setText(nameField2.getText());
+        		whiteWinsText.setText("Wins: " + whiteWins);
+        		blackWinsText.setText("Wins: " + blackWins);
         		gameStarted = true;
         });
         
@@ -216,6 +282,8 @@ public class Main extends Application {
     		updateTurnInfo();
     		whiteText.setText(nameField1.getText());
     		blackText.setText(nameField2.getText());
+    		whiteWinsText.setText("Wins: " + whiteWins);
+    		blackWinsText.setText("Wins: " + blackWins);
     		gameStarted = true;
     		resetButton.setDisable(true);
     		resetButton.setVisible(false);
@@ -297,7 +365,6 @@ public class Main extends Application {
        			enablePieceToMoveFrom();
        		}
        	}    	
-        	
       	//Phase 2 and 3. Allows player to place a piece in a valid spot after picking a piece to move.
        	else if (piece.isEmpty() && !piece.isDisable() && movingPiece == true) {
        		if (board.movePiece(isWhiteTurn, moveFromID, piece.getID()) == true) {
@@ -330,23 +397,23 @@ public class Main extends Application {
        		piece.clearPlayer();
        	}      	
       	updateTurnInfo();
-      	
+
       	// AI phase one branch
        	if (aiActive && blackPhase == 1 && !isWhiteTurn) {
-   			AIphaseOne();
+       		AIphaseOne();
+       		updateTurnInfo();
    		}
        	
        	// AI phase two and three branch
    		else if (aiActive && blackPhase > 1 && !isWhiteTurn && !movingPiece) {
    			AIphaseTwoThree();
+   			updateTurnInfo();
    		}
-      	updateTurnInfo();
     }
 	
 	public void AIphaseOne() {
-  		int index = board.AIplace();
+		int index = board.AIplace();
   		Piece blackAI = pieces.get(index);
-  		//System.out.print(blackAI.getID() + ", ");
   		if (blackAI.isEmpty() && !blackAI.isDisable() && blackPhase == 1) {
   			blackAI.setPlayer(isWhiteTurn);
   			board.placePiece(isWhiteTurn, board.spaces.get(index));
@@ -370,9 +437,8 @@ public class Main extends Application {
 	}
    
 	public void AIphaseTwoThree() {
-  		// System.out.println("AI phase 2 entered\nisWhiteTurn = " + isWhiteTurn);
-  		int pieceIndex = board.AIpiece(blackPhase); //System.out.println("pieceIndex = " + pieceIndex + "  location = " + board.spaces.get(pieceIndex)); 
-  		int spaceIndex = board.AImove(pieceIndex, blackPhase); //System.out.println("spaceIndex = " + spaceIndex  + "  location = " + board.spaces.get(spaceIndex));
+  		int pieceIndex = board.AIpiece(blackPhase);
+  		int spaceIndex = board.AImove(pieceIndex, blackPhase);
   		System.out.println("black is moving from: " + board.spaces.get(pieceIndex));
   		System.out.println("black is moving to:   " + board.spaces.get(spaceIndex) + "\n");
   		
@@ -494,7 +560,6 @@ public class Main extends Application {
 		for (Piece piece: pieces) {
 			piece.setDisable(true);
 		}
-		
 	}
 	
 	//Clears the board and sets it up for a new game	
