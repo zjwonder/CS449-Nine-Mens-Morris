@@ -309,7 +309,7 @@ public class Board {
 	public int AIchoose() {
 		Random rand = new Random();
 		int index = rand.nextInt(1000) % whitePieces.size();
-		while (!whitePieces.contains(spaces.get(index)) && !checkMill(true, spaces.get(index))) {
+		while (whitePieces.contains(spaces.get(index)) && !checkMill(true, spaces.get(index))) {
 			index = rand.nextInt(1000) % whitePieces.size();
 		}
 		return index;
@@ -330,7 +330,7 @@ public class Board {
 		return index;
 	}
 	
-	//
+	// method randomly chooses which location to move to, based on piece chosen in AIpiece
 	public int AImove(int pieceIndex, int blackPhase) {
 		Random rand = new Random();
 		Set<Integer> moves = getPossibleMoves(spaces.get(pieceIndex), blackPhase);

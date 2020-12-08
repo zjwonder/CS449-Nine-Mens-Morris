@@ -241,5 +241,28 @@ public class TestNineMensMorris extends TestCase {
     	assertTrue(testBoard.getPossibleMoves(11, 3).size() == 23);
     }
 
+    public void testAIremove() {
+    	isWhiteTurn = true;
+    	testBoard.placePiece(isWhiteTurn, 17);
+    	testBoard.placePiece(isWhiteTurn, 47);
+    	testBoard.placePiece(isWhiteTurn, 77);
+    	
+    	isWhiteTurn = false;
+    	int value = testBoard.AIchoose();
+    	value = testBoard.spaces.get(value);
+    	System.out.println(testBoard.whitePieces);
+    	// System.out.println(value);
+    	assertFalse(testBoard.removePiece(isWhiteTurn, value));
+    	assertFalse(testBoard.removePiece(isWhiteTurn, value));
+    	assertFalse(testBoard.removePiece(isWhiteTurn, value));
+    }
+    
+    public void testAIplace() {
+    	
+    }
+    
+    public void testAImove() {
+    	
+    }
 }
 

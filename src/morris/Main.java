@@ -1,6 +1,7 @@
 package morris;
 
 	
+import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -120,6 +121,10 @@ public class Main extends Application {
     	stage.setResizable(false);			 
     	updateTurnInfo();
     	
+//        tellWhenMillFormed.setFont(new Font("Algerian", 20));  
+//        tellWhoseTurn.setFont(new Font("Algerian", 20)); 
+//        tellWhatToDo.setFont(new Font("Algerian", 20)); 
+
         tellWhenMillFormed.setTextAlignment(TextAlignment.CENTER);
         tellWhoseTurn.setTextAlignment(TextAlignment.CENTER);
         tellWhatToDo.setTextAlignment(TextAlignment.CENTER);
@@ -128,19 +133,19 @@ public class Main extends Application {
     	whiteInfo.setSpacing(10);
     	whiteInfo.setLayoutX(50);
     	whiteInfo.setLayoutY(25);
-    	whiteInfo.getChildren().add(whiteText);
-    	whiteInfo.getChildren().add(whitePiecesRemaining);
-    	whiteInfo.getChildren().add(whitePlayerPhase);
-    	whiteInfo.getChildren().add(whiteFlyingAllowed);
+    	whiteInfo.getChildren().add(whiteText); whiteText.setFont(new Font("Algerian", 20));
+    	whiteInfo.getChildren().add(whitePiecesRemaining); whitePiecesRemaining.setFont(new Font("Algerian", 20));
+    	whiteInfo.getChildren().add(whitePlayerPhase); whitePlayerPhase.setFont(new Font("Algerian", 20));
+    	whiteInfo.getChildren().add(whiteFlyingAllowed); whiteFlyingAllowed.setFont(new Font("Algerian", 20));
     	
     	blackInfo.setAlignment(Pos.CENTER);
     	blackInfo.setSpacing(10);
-    	blackInfo.setLayoutX(775);
+    	blackInfo.setLayoutX(670);
     	blackInfo.setLayoutY(25);
-    	blackInfo.getChildren().add(blackText);
-    	blackInfo.getChildren().add(blackPiecesRemaining);
-    	blackInfo.getChildren().add(blackPlayerPhase);
-    	blackInfo.getChildren().add(blackFlyingAllowed);
+    	blackInfo.getChildren().add(blackText); blackText.setFont(new Font("Algerian", 20));
+    	blackInfo.getChildren().add(blackPiecesRemaining); blackPiecesRemaining.setFont(new Font("Algerian", 20));
+    	blackInfo.getChildren().add(blackPlayerPhase); blackPlayerPhase.setFont(new Font("Algerian", 20));
+    	blackInfo.getChildren().add(blackFlyingAllowed); blackFlyingAllowed.setFont(new Font("Algerian", 20));
     	
     	turnInfo.setAlignment(Pos.CENTER);
     	turnInfo.setSpacing(10);
@@ -149,8 +154,6 @@ public class Main extends Application {
     	turnInfo.getChildren().add(tellWhoseTurn);
     	turnInfo.getChildren().add(tellWhenMillFormed);
     	turnInfo.getChildren().add(tellWhatToDo);
-    	
-    	
     	
      	mv.setX(50); mv.setY(150);
      	pane.getChildren().add(mv);
@@ -310,6 +313,7 @@ public class Main extends Application {
        				enablePieceToMoveFrom();
        			}
        		}
+
        	}
        	
       	//Phase 2 and 3. Allows player to pick one of their own pieces to move
@@ -325,11 +329,15 @@ public class Main extends Application {
        		movingPiece = true;
        		piece.clearPlayer();
        	}      	
+      	updateTurnInfo();
       	
-       	else if (aiActive && blackPhase == 1 && !isWhiteTurn) {
+      	// AI phase one branch
+       	if (aiActive && blackPhase == 1 && !isWhiteTurn) {
    			AIphaseOne();
    		}
-   		else if (aiActive && blackPhase > 1 && !isWhiteTurn) {
+       	
+       	// AI phase two and three branch
+   		else if (aiActive && blackPhase > 1 && !isWhiteTurn && !movingPiece) {
    			AIphaseTwoThree();
    		}
       	updateTurnInfo();
@@ -362,9 +370,11 @@ public class Main extends Application {
 	}
    
 	public void AIphaseTwoThree() {
-  		System.out.println("AI phase 2 entered\nisWhiteTurn = " + isWhiteTurn);
-  		int pieceIndex = board.AIpiece(blackPhase); System.out.println("pieceIndex = " + pieceIndex + "  location = " + board.spaces.get(pieceIndex)); 
-  		int spaceIndex = board.AImove(pieceIndex, blackPhase); System.out.println("spaceIndex = " + spaceIndex  + "  location = " + board.spaces.get(spaceIndex));
+  		// System.out.println("AI phase 2 entered\nisWhiteTurn = " + isWhiteTurn);
+  		int pieceIndex = board.AIpiece(blackPhase); //System.out.println("pieceIndex = " + pieceIndex + "  location = " + board.spaces.get(pieceIndex)); 
+  		int spaceIndex = board.AImove(pieceIndex, blackPhase); //System.out.println("spaceIndex = " + spaceIndex  + "  location = " + board.spaces.get(spaceIndex));
+  		System.out.println("black is moving from: " + board.spaces.get(pieceIndex));
+  		System.out.println("black is moving to:   " + board.spaces.get(spaceIndex) + "\n");
   		
   		if (pieces.get(spaceIndex).isEmpty()) {
   			pieces.get(pieceIndex).clearPlayer();
@@ -429,7 +439,7 @@ public class Main extends Application {
 		Set<Integer> validSpaces = new HashSet<Integer>();
 		validSpaces = board.getPossibleMoves(moveFromID, phase);
 		for (int i:validSpaces) {
-			System.out.println(i);
+			//System.out.println(i);
 		}
 		for (Piece piece: pieces) {
 			piece.setDisable(true);
@@ -458,18 +468,20 @@ public class Main extends Application {
 	
 	//This checks which phase the given player is in and updates the relevant variable
 	public void updatePhase(boolean isWhiteTurn) {
-		/*if (isWhiteTurn == true) {
+		if (isWhiteTurn == true) {
 			blackPhase = board.checkPhase(!isWhiteTurn);
 			if (board.checkForWin(isWhiteTurn, blackPhase) == true) winCondition = true;
 		}
 		else {
 			whitePhase = board.checkPhase(!isWhiteTurn);
 			if (board.checkForWin(isWhiteTurn, whitePhase) == true) winCondition = true;
-		}*/
-		blackPhase = board.checkPhase(false);
-		if (board.checkForWin(false, blackPhase) == true) winCondition = true;
-		whitePhase = board.checkPhase(true);
-		if (board.checkForWin(true, whitePhase) == true) winCondition = true;
+		}
+		// i believe this refined version of the above code was causing an error where
+		// if a white player removed a black piece in phase one, they automatically won
+//		blackPhase = board.checkPhase(false);
+//		if (board.checkForWin(false, blackPhase) == true) winCondition = true;
+//		whitePhase = board.checkPhase(true);
+//		if (board.checkForWin(true, whitePhase) == true) winCondition = true;
 		
 	}
 	
