@@ -2,30 +2,19 @@ package morris;
 
 	
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import javafx.application.*;
-import javafx.event.*;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.*;
 import javafx.scene.layout.*;
-import javafx.scene.shape.*;
 import javafx.scene.text.*;
 
 
@@ -44,7 +33,7 @@ public class Main extends Application {
 	VBox whiteInfo = new VBox(), blackInfo = new VBox(), turnInfo = new VBox(), startInfo = new VBox();
 	HBox playerLabelHBox1 = new HBox(),  playerLabelHBox2 = new HBox(), gameTypeHBox = new HBox(), playerTypeHBox = new HBox();
 	Text welcomeTitle = new Text(),  welcomeSubtitle = new Text(), creditText = new Text(), whiteText = new Text("White"), blackText = new Text("Black");
-	Text whitePiecesRemaining = new Text(), blackPiecesRemaining = new Text(), whitePlayerPhase = new Text(), blackPlayerPhase = new Text(), tellWhenMillFormed = new Text(""), tellWhoseTurn = new Text(""), tellWhatToDo = new Text("");
+	Text whitePiecesRemaining = new Text(), blackPiecesRemaining = new Text(), whitePlayerPhase = new Text(), blackPlayerPhase = new Text(), tellWhenMillFormed = new Text(""), tellWhoseTurn = new Text(""), tellWhatToDo = new Text(""), whiteFlyingAllowed = new Text(), blackFlyingAllowed = new Text();
 	Image startScreen = null, nineBG = new Image("file:src\\img\\nineMensMorris.png"),sixBG = new Image("file:src\\img\\sixMensMorris.png"),twelveBG = new Image("file:src\\img\\twelveMensMorris.png");
 	ImageView mv = new ImageView(startScreen);
 	
@@ -142,6 +131,7 @@ public class Main extends Application {
     	whiteInfo.getChildren().add(whiteText);
     	whiteInfo.getChildren().add(whitePiecesRemaining);
     	whiteInfo.getChildren().add(whitePlayerPhase);
+    	whiteInfo.getChildren().add(whiteFlyingAllowed);
     	
     	blackInfo.setAlignment(Pos.CENTER);
     	blackInfo.setSpacing(10);
@@ -150,6 +140,7 @@ public class Main extends Application {
     	blackInfo.getChildren().add(blackText);
     	blackInfo.getChildren().add(blackPiecesRemaining);
     	blackInfo.getChildren().add(blackPlayerPhase);
+    	blackInfo.getChildren().add(blackFlyingAllowed);
     	
     	turnInfo.setAlignment(Pos.CENTER);
     	turnInfo.setSpacing(10);
@@ -158,7 +149,6 @@ public class Main extends Application {
     	turnInfo.getChildren().add(tellWhoseTurn);
     	turnInfo.getChildren().add(tellWhenMillFormed);
     	turnInfo.getChildren().add(tellWhatToDo);
-    	
     	
     	
     	
@@ -476,10 +466,10 @@ public class Main extends Application {
 			whitePhase = board.checkPhase(!isWhiteTurn);
 			if (board.checkForWin(isWhiteTurn, whitePhase) == true) winCondition = true;
 		}*/
-		blackPhase = board.checkPhase(!isWhiteTurn);
-		if (board.checkForWin(isWhiteTurn, blackPhase) == true) winCondition = true;
-		whitePhase = board.checkPhase(!isWhiteTurn);
-		if (board.checkForWin(isWhiteTurn, whitePhase) == true) winCondition = true;
+		blackPhase = board.checkPhase(false);
+		if (board.checkForWin(false, blackPhase) == true) winCondition = true;
+		whitePhase = board.checkPhase(true);
+		if (board.checkForWin(true, whitePhase) == true) winCondition = true;
 		
 	}
 	
@@ -509,6 +499,7 @@ public class Main extends Application {
 		board.reset(numPieces);
 		board = new Board(numPieces);
 		updateTurnInfo();
+		
 		//for (Piece piece : pieces) System.out.println(piece.getID());
 	}
 	
@@ -544,6 +535,15 @@ public class Main extends Application {
 				else if (movingPiece) tellWhatToDo.setText("Select spot to move to");
 				else tellWhatToDo.setText("Select a piece to move");
 			}
+			
+
+			if (whitePhase == 3 && board.flyingAllowed) whiteFlyingAllowed.setText("Flying allowed");
+			if (blackPhase == 3 && board.flyingAllowed) blackFlyingAllowed.setText("Flying allowed");
+			if (whitePhase == 1) {
+				whiteFlyingAllowed.setText("");
+				blackFlyingAllowed.setText("");
+			}
+			
 		}
 		
 		else {
@@ -562,6 +562,7 @@ public class Main extends Application {
 			tellWhatToDo.setText("Press button to play again");
 			endGame();
 		}
+		
 	}
 	
 	// reads data files containing button coordinates for various game types

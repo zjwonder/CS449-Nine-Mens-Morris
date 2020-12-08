@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
-import javafx.util.Pair;
 
 
 public class Board {
@@ -111,9 +110,9 @@ public class Board {
 		List<Integer> playerPieces = new ArrayList<Integer>();
 		if (isWhiteTurn == true) playerPieces = whitePieces;
 		else playerPieces = blackPieces;
-		if (!spaceAvailable(newSpace) || (!connections.get(oldSpace).contains(newSpace) && playerPieces.size() >3)) { 
+		if (!spaceAvailable(newSpace) || (!connections.get(oldSpace).contains(newSpace) && playerPieces.size() > 3)) { 
 			//make sure neither player has the desired space and new space is a valid movement from old space
-			System.out.println("Not a valid move.");
+			//System.out.println("Not a valid move.");
 			return false;
 		}
 		playerPieces.set(playerPieces.indexOf(oldSpace), newSpace);
@@ -351,3 +350,4 @@ public class Board {
 		return index;
 	}
 }
+
