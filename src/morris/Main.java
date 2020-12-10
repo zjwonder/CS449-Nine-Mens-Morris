@@ -30,7 +30,7 @@ public class Main extends Application {
 			infoStyle = "-fx-background-color: #fff0c1;-fx-padding: 4;-fx-border-style: solid inside;"
 			+ "-fx-border-width: 3;-fx-border-color: white;";
 	Font defaultFont = Font.font(defFontName, 16);
-	Button startButton = new Button(), resetButton = new Button();
+	Button startButton = new Button(), resetButton = new Button(), returnButton = new Button();
 	RadioButton sixMorrisRB = new RadioButton(), aiPlayerRB = new RadioButton(), 
 			humanPlayerRB = new RadioButton(), nineMorrisRB = new RadioButton(), twelveMorrisRB = new RadioButton();
 	ToggleGroup gameType = new ToggleGroup(), playerTypeChoice = new ToggleGroup();
@@ -38,8 +38,8 @@ public class Main extends Application {
 	TextField nameField1 = new TextField("White"), nameField2 = new TextField("Black");
 	BorderPane startPane = new BorderPane();
 	Pane boardPane = new Pane();
-	VBox whiteInfo = new VBox(), blackInfo = new VBox(), turnInfo = new VBox(), 
-			centerVBox = new VBox(), leftVBox = new VBox(), rightVBox = new VBox(), bottomVBox = new VBox();
+	VBox whiteInfo = new VBox(), blackInfo = new VBox(), turnInfo = new VBox(), centerVBox = new VBox(), 
+			leftVBox = new VBox(), rightVBox = new VBox(), bottomVBox = new VBox(), matchEndVBox = new VBox();
 	HBox playerLabelHBox1 = new HBox(),  playerLabelHBox2 = new HBox(), gameTypeHBox = new HBox(), 
 			playerTypeHBox = new HBox(), titleHBox = new HBox(), creditHBox = new HBox(), startBtnHBox = new HBox(), subtitleHBox;
 	Text welcomeTitle = new Text(), creditText = new Text(), whiteText = new Text("White"), blackText = new Text("Black"), 
@@ -58,11 +58,137 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception{
 				
-		// Setup Stage 
+		// Set up Stage 
     	stage.setResizable(false);
     	
-    	// Setup Start Scene
+    	// Set up Start scene, pane, and child nodes
     	Scene startScene = new Scene(startPane, 650, 750);
+    	setStartNodes();
+    	
+    	// Set up Board Scene
+		Scene boardScene = new Scene(boardPane, 934, 1024);
+		stage.setTitle("Nine Men's Morris"); 
+    	stage.setResizable(false);			 
+    	updateTurnInfo();
+    	setBoardNodes();
+     	
+     	// Create all pieces
+    	Piece button1, button2, button3, button4, button5, button6, button7, button8, button9, 
+		button10, button11, button12, button13, button14, button15, button16, button17, button18, 
+		button19, button20, button21, button22, button23, button24;
+		
+		button1 = new Piece(); pieces.add(button1);
+		button2 = new Piece(); pieces.add(button2);
+		button3 = new Piece(); pieces.add(button3);
+		button4 = new Piece(); pieces.add(button4);
+		button5 = new Piece(); pieces.add(button5);
+		button6 = new Piece(); pieces.add(button6);
+		button7 = new Piece(); pieces.add(button7);
+		button8 = new Piece(); pieces.add(button8);
+		button9 = new Piece(); pieces.add(button9);
+		button10 = new Piece(); pieces.add(button10);
+		button11 = new Piece(); pieces.add(button11);
+		button12 = new Piece(); pieces.add(button12);
+		button13 = new Piece(); pieces.add(button13);
+		button14 = new Piece(); pieces.add(button14);
+		button15 = new Piece(); pieces.add(button15);
+		button16 = new Piece(); pieces.add(button16);
+		button17 = new Piece(); pieces.add(button17);
+		button18 = new Piece(); pieces.add(button18);
+		button19 = new Piece(); pieces.add(button19);
+		button20 = new Piece(); pieces.add(button20);
+		button21 = new Piece(); pieces.add(button21);
+		button22 = new Piece(); pieces.add(button22);
+		button23 = new Piece(); pieces.add(button23);
+		button24 = new Piece(); pieces.add(button24);
+		
+		boardPane.getChildren().addAll(pieces);
+     
+		// Show window
+        stage.setScene(startScene);
+        stage.show();
+        
+        
+        // Start button event handler
+        startButton.setOnAction(e -> {
+        		stage.setScene(boardScene);
+        		resetGame(numPieces);
+        		updateTurnInfo();
+        		whiteText.setText(nameField1.getText());
+        		blackText.setText(nameField2.getText());
+        		whiteWinsText.setText("Wins: " + whiteWins);
+        		blackWinsText.setText("Wins: " + blackWins);
+        		gameStarted = true;
+        });
+        
+        // End of match 'play again' button event handler
+        resetButton.setOnAction(e -> {
+    		stage.setScene(boardScene);
+    		resetGame(numPieces);
+    		updateTurnInfo();
+    		whiteText.setText(nameField1.getText());
+    		blackText.setText(nameField2.getText());
+    		whiteWinsText.setText("Wins: " + whiteWins);
+    		blackWinsText.setText("Wins: " + blackWins);
+    		gameStarted = true;
+    		matchEndVBox.setDisable(true);
+        	matchEndVBox.setVisible(false);
+        });
+        
+        // End of match 'return to menu' button event handler
+        returnButton.setOnAction(e -> {
+    		stage.setScene(startScene);
+    		resetGame(numPieces);
+    		updateTurnInfo();
+    		whiteText.setText("White");
+    		blackText.setText("Black");
+    		whiteWins = 0;
+    		blackWins = 0;
+    		nineMorrisRB.setSelected(true);
+    		humanPlayerRB.setSelected(true);
+    		gameStarted = false;
+        });
+        
+        // Event Handlers for radio controls
+        sixMorrisRB.setOnAction(e -> {numPieces = 6; board.flyingAllowed = false; stage.setTitle("Six Men's Morris");});
+        nineMorrisRB.setOnAction(e -> {numPieces = 9; board.flyingAllowed = true; stage.setTitle("Nine Men's Morris");});
+        twelveMorrisRB.setOnAction(e -> {numPieces = 12; board.flyingAllowed = true; stage.setTitle("Twelve Men's Morris");});
+        aiPlayerRB.setOnAction(e -> aiActive = true);
+        humanPlayerRB.setOnAction(e -> aiActive = false);
+        
+        
+        //EventHandlers for buttons
+        button1.setOnAction(e->{SpaceButtonHandler(button1);});
+        button2.setOnAction(e->{SpaceButtonHandler(button2);});
+        button3.setOnAction(e->{SpaceButtonHandler(button3);});
+        button4.setOnAction(e->{SpaceButtonHandler(button4);});
+        button5.setOnAction(e->{SpaceButtonHandler(button5);});
+        button6.setOnAction(e->{SpaceButtonHandler(button6);});
+        button7.setOnAction(e->{SpaceButtonHandler(button7);});
+        button8.setOnAction(e->{SpaceButtonHandler(button8);});
+        button9.setOnAction(e->{SpaceButtonHandler(button9);});
+        button10.setOnAction(e->{SpaceButtonHandler(button10);});
+        button11.setOnAction(e->{SpaceButtonHandler(button11);});
+        button12.setOnAction(e->{SpaceButtonHandler(button12);});
+        button13.setOnAction(e->{SpaceButtonHandler(button13);});
+        button14.setOnAction(e->{SpaceButtonHandler(button14);});
+        button15.setOnAction(e->{SpaceButtonHandler(button15);});
+        button16.setOnAction(e->{SpaceButtonHandler(button16);});
+        button17.setOnAction(e->{SpaceButtonHandler(button17);});
+        button18.setOnAction(e->{SpaceButtonHandler(button18);});
+        button19.setOnAction(e->{SpaceButtonHandler(button19);});
+        button20.setOnAction(e->{SpaceButtonHandler(button20);});
+        button21.setOnAction(e->{SpaceButtonHandler(button21);});
+        button22.setOnAction(e->{SpaceButtonHandler(button22);});
+        button23.setOnAction(e->{SpaceButtonHandler(button23);});
+        button24.setOnAction(e->{SpaceButtonHandler(button24);});
+            
+	}
+	
+	
+	// Defines contents and style of all setup screen nodes and panes
+	private void setStartNodes() {
+    	
     	startPane.setTop(titleHBox);
     	startPane.setCenter(centerVBox);
     	startPane.setBottom(bottomVBox);
@@ -70,7 +196,7 @@ public class Main extends Application {
     	startPane.setRight(rightVBox);
     	startPane.setStyle("-fx-background-color: linear-gradient(from 0% 10% to 0% 90%, #95a2b8, #172c42)");
     	
-    	// Define start button
+    	// Start button
     	startButton.setPrefHeight(40);
     	startButton.setPrefWidth(240);
     	startButton.setText("Start Match");
@@ -79,16 +205,6 @@ public class Main extends Application {
 		startButton.setFont(Font.font(defFontName, 20));
 		startButton.setDisable(false);
 		startButton.setVisible(true);
-		
-		resetButton.setText("Play Again");
-		resetButton.setLayoutX(417);
-		resetButton.setLayoutY(540);
-		resetButton.setPrefHeight(40);
-    	resetButton.setPrefWidth(100);
-		resetButton.setTextAlignment(TextAlignment.CENTER);
-		resetButton.setFont(defaultFont);
-		resetButton.setDisable(true);
-		resetButton.setVisible(false);
 		
 		// Define radio controls for game type
 		sixMorrisRB.setText("Six Men's Morris");
@@ -170,15 +286,12 @@ public class Main extends Application {
     	bottomVBox.getChildren().add(creditText);
     	bottomVBox.setPadding(new Insets(20, 20, 20, 20));
     	bottomVBox.setAlignment(Pos.CENTER);
-    	
-    	
-    	// Setup Board Scene
-		Scene boardScene = new Scene(boardPane, 934, 1024);
-		stage.setTitle("Nine Men's Morris"); 
-    	stage.setResizable(false);			 
-    	updateTurnInfo();
-    	
-        tellWhenMillFormed.setFont(Font.font(defFontName, 20));  
+	}
+	
+	
+	// Defines contents and style of all board nodes and panes
+	private void setBoardNodes() {
+		tellWhenMillFormed.setFont(Font.font(defFontName, 20));  
         tellWhoseTurn.setFont(Font.font(defFontName, 20)); 
         tellWhatToDo.setFont(Font.font(defFontName, 20)); 
 
@@ -221,113 +334,31 @@ public class Main extends Application {
     	turnInfo.setPrefHeight(120);
     	turnInfo.getChildren().addAll(tellWhoseTurn, tellWhenMillFormed, tellWhatToDo);
     	
+		resetButton.setText("Play Again");
+		resetButton.setPrefHeight(40);
+    	resetButton.setPrefWidth(100);
+		resetButton.setTextAlignment(TextAlignment.CENTER);
+		resetButton.setFont(defaultFont);
+		
+		returnButton.setText("Quit");
+		returnButton.setPrefHeight(40);
+    	returnButton.setPrefWidth(100);
+    	returnButton.setTextAlignment(TextAlignment.CENTER);
+    	returnButton.setFont(defaultFont);
+    	
+    	matchEndVBox.getChildren().addAll(resetButton, returnButton);
+    	matchEndVBox.setSpacing(5);
+    	matchEndVBox.setLayoutX(417);
+    	matchEndVBox.setLayoutY(525);
+    	matchEndVBox.setDisable(true);
+    	matchEndVBox.setVisible(false);
+    	
      	mv.setX(50); mv.setY(150);
-     	boardPane.getChildren().addAll(whiteInfo, turnInfo, blackInfo, mv, resetButton);
+     	boardPane.getChildren().addAll(whiteInfo, turnInfo, blackInfo, mv, matchEndVBox);
      	boardPane.setStyle("-fx-background-color: linear-gradient(from 0% 10% to 0% 90%, #95a2b8, #172c42)");
-
-     	
-     	// Create all pieces
-    	Piece button1, button2, button3, button4, button5, button6, button7, button8, button9, 
-		button10, button11, button12, button13, button14, button15, button16, button17, button18, 
-		button19, button20, button21, button22, button23, button24;
-		
-		button1 = new Piece(); pieces.add(button1);
-		button2 = new Piece(); pieces.add(button2);
-		button3 = new Piece(); pieces.add(button3);
-		button4 = new Piece(); pieces.add(button4);
-		button5 = new Piece(); pieces.add(button5);
-		button6 = new Piece(); pieces.add(button6);
-		button7 = new Piece(); pieces.add(button7);
-		button8 = new Piece(); pieces.add(button8);
-		button9 = new Piece(); pieces.add(button9);
-		button10 = new Piece(); pieces.add(button10);
-		button11 = new Piece(); pieces.add(button11);
-		button12 = new Piece(); pieces.add(button12);
-		button13 = new Piece(); pieces.add(button13);
-		button14 = new Piece(); pieces.add(button14);
-		button15 = new Piece(); pieces.add(button15);
-		button16 = new Piece(); pieces.add(button16);
-		button17 = new Piece(); pieces.add(button17);
-		button18 = new Piece(); pieces.add(button18);
-		button19 = new Piece(); pieces.add(button19);
-		button20 = new Piece(); pieces.add(button20);
-		button21 = new Piece(); pieces.add(button21);
-		button22 = new Piece(); pieces.add(button22);
-		button23 = new Piece(); pieces.add(button23);
-		button24 = new Piece(); pieces.add(button24);
-		
-		boardPane.getChildren().addAll(pieces);
-     
-		// Show window
-        stage.setScene(startScene);
-        stage.show();
-        
-        
-      
-        //EventHandler for start button
-        startButton.setOnAction(e -> {
-        		stage.setScene(boardScene);
-        		resetGame(numPieces);
-        		updateTurnInfo();
-        		whiteText.setText(nameField1.getText());
-        		blackText.setText(nameField2.getText());
-        		whiteWinsText.setText("Wins: " + whiteWins);
-        		blackWinsText.setText("Wins: " + blackWins);
-        		gameStarted = true;
-        });
-        
-        resetButton.setOnAction(e -> {
-    		stage.setScene(boardScene);
-    		resetGame(numPieces);
-    		updateTurnInfo();
-    		whiteText.setText(nameField1.getText());
-    		blackText.setText(nameField2.getText());
-    		whiteWinsText.setText("Wins: " + whiteWins);
-    		blackWinsText.setText("Wins: " + blackWins);
-    		gameStarted = true;
-    		resetButton.setDisable(true);
-    		resetButton.setVisible(false);
-    });
-        
-        
-        //EventHandler for radio controls
-        sixMorrisRB.setOnAction(e -> {numPieces = 6; board.flyingAllowed = false;stage.setTitle("Six Men's Morris");});
-        nineMorrisRB.setOnAction(e -> {numPieces = 9; board.flyingAllowed = true;stage.setTitle("Nine Men's Morris");});
-        twelveMorrisRB.setOnAction(e -> {numPieces = 12; board.flyingAllowed = true;stage.setTitle("Twelve Men's Morris");});
-        aiPlayerRB.setOnAction(e -> aiActive = true);
-        humanPlayerRB.setOnAction(e -> aiActive = false);
-        
-        
-        //EventHandlers for buttons
-        button1.setOnAction(e->{SpaceButtonHandler(button1);});
-        button2.setOnAction(e->{SpaceButtonHandler(button2);});
-        button3.setOnAction(e->{SpaceButtonHandler(button3);});
-        button4.setOnAction(e->{SpaceButtonHandler(button4);});
-        button5.setOnAction(e->{SpaceButtonHandler(button5);});
-        button6.setOnAction(e->{SpaceButtonHandler(button6);});
-        button7.setOnAction(e->{SpaceButtonHandler(button7);});
-        button8.setOnAction(e->{SpaceButtonHandler(button8);});
-        button9.setOnAction(e->{SpaceButtonHandler(button9);});
-        button10.setOnAction(e->{SpaceButtonHandler(button10);});
-        button11.setOnAction(e->{SpaceButtonHandler(button11);});
-        button12.setOnAction(e->{SpaceButtonHandler(button12);});
-        button13.setOnAction(e->{SpaceButtonHandler(button13);});
-        button14.setOnAction(e->{SpaceButtonHandler(button14);});
-        button15.setOnAction(e->{SpaceButtonHandler(button15);});
-        button16.setOnAction(e->{SpaceButtonHandler(button16);});
-        button17.setOnAction(e->{SpaceButtonHandler(button17);});
-        button18.setOnAction(e->{SpaceButtonHandler(button18);});
-        button19.setOnAction(e->{SpaceButtonHandler(button19);});
-        button20.setOnAction(e->{SpaceButtonHandler(button20);});
-        button21.setOnAction(e->{SpaceButtonHandler(button21);});
-        button22.setOnAction(e->{SpaceButtonHandler(button22);});
-        button23.setOnAction(e->{SpaceButtonHandler(button23);});
-        button24.setOnAction(e->{SpaceButtonHandler(button24);});
-        
-        //System.out.println(board.spaces);     
 	}
 	
-	//Function called by button1-24 event handler. This is essentially the turn manager.
+	// Method called by button 1-24 event handlers. This is essentially the turn logic.
 	public void SpaceButtonHandler(Piece piece) {
 		//Allows player to remove a piece when a mill is formed
       	if (!piece.isDisable() && millFormed == true) {
@@ -559,8 +590,8 @@ public class Main extends Application {
 	//Pretty self explanatory
 	public void endGame() {
 		System.out.println("endgame");
-		resetButton.setDisable(false);
-		resetButton.setVisible(true);
+		matchEndVBox.setDisable(false);
+		matchEndVBox.setVisible(true);
 		for (Piece piece: pieces) {
 			piece.setDisable(true);
 		}
