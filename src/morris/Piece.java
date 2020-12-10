@@ -13,7 +13,9 @@ public class Piece extends Button{
 	private ePlayer player;
 	private Image blackPiece = new Image("file:src\\img\\black.png", 50, 50, false, false);
     private Image whitePiece = new Image("file:src\\img\\white.png", 50, 50, false, false);
-	
+    private Image activePiece = new Image("file:src\\img\\Orb.png", 50, 50, false, false);
+    private Boolean isActiveImageOn = false;
+    
     
 	public Piece(int ID, int xCoord, int yCoord) {
 		pieceID = ID;
@@ -64,6 +66,7 @@ public class Piece extends Button{
 	public void clearPlayer() {
 		player = ePlayer.none;
 		setGraphic(null);
+		isActiveImageOn = false;
 	}
 	
 	public boolean isEmpty() {
@@ -71,9 +74,20 @@ public class Piece extends Button{
 		return false;
 	}
 	
+	public boolean isActiveImageOn() {
+		if (isActiveImageOn == true) return true;
+		return false;
+	}
+	
+	public void setActiveImage() {
+		setGraphic(new ImageView(activePiece));
+		isActiveImageOn = true;		
+	}
+	
 	public void setPlayer(boolean isWhiteTurn) {
 		if (isWhiteTurn == true) setGraphic(new ImageView(whitePiece));
 		if (isWhiteTurn == false) setGraphic(new ImageView(blackPiece));
+		isActiveImageOn = false;
 	}
 	
 	

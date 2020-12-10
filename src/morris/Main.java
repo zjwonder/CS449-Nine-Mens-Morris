@@ -485,7 +485,10 @@ public class Main extends Application {
 			if (blackPhase == 1) {
 				piece.setDisable(false);
 			}
-			else piece.setDisable(true);
+			else {
+				if (piece.isActiveImageOn()) piece.clearPlayer();
+				piece.setDisable(true);
+			}
 		}
 				
 		if (isWhiteTurn == false && blackPhase != 1) {
@@ -513,7 +516,10 @@ public class Main extends Application {
 			piece.setDisable(true);
 		}
 		for (Piece piece : pieces) {
-			if (validSpaces.contains(piece.getID())) piece.setDisable(false);
+			if (validSpaces.contains(piece.getID())) {
+				piece.setDisable(false);
+				piece.setActiveImage();
+			}
 		}
 		}
 
@@ -544,12 +550,6 @@ public class Main extends Application {
 			whitePhase = board.checkPhase(!isWhiteTurn);
 			if (board.checkForWin(isWhiteTurn, whitePhase) == true) winCondition = true;
 		}
-		// i believe this refined version of the above code was causing an error where
-		// if a white player removed a black piece in phase one, they automatically won
-//		blackPhase = board.checkPhase(false);
-//		if (board.checkForWin(false, blackPhase) == true) winCondition = true;
-//		whitePhase = board.checkPhase(true);
-//		if (board.checkForWin(true, whitePhase) == true) winCondition = true;
 		
 	}
 	
