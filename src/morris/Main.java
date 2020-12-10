@@ -333,7 +333,7 @@ public class Main extends Application {
       	if (!piece.isDisable() && millFormed == true) {
        		if (board.removePiece(isWhiteTurn, piece.getID()) == true) {
        			piece.clearPlayer();
-       			updatePhase(isWhiteTurn);
+
        			millFormed = false;
        			if (winCondition == true) {
        				endGame();
@@ -422,7 +422,7 @@ public class Main extends Application {
   				index = board.AIchoose();
   				pieces.get(index).clearPlayer();
   				board.removePiece(isWhiteTurn, board.spaces.get(index));
-  				updatePhase(isWhiteTurn);
+
   				isWhiteTurn = !isWhiteTurn;
   			}
   			else {
@@ -452,7 +452,7 @@ public class Main extends Application {
   				pieceIndex = board.AIchoose();
   				pieces.get(pieceIndex).clearPlayer();
   				board.removePiece(isWhiteTurn, board.spaces.get(pieceIndex));
-  				updatePhase(isWhiteTurn);
+
   				isWhiteTurn = !isWhiteTurn;
   			}
   			else {
@@ -465,6 +465,7 @@ public class Main extends Application {
 	//Enables the opponent's pieces. This is called after a mill is formed.
 	public void enablePiecesMillFormed() {
 		for (Piece piece: pieces) {
+			if (piece.isActiveImageOn()) piece.clearPlayer();
 			piece.setDisable(true);
 		}
 		if (isWhiteTurn == true) {
@@ -527,6 +528,7 @@ public class Main extends Application {
 	public void reEnablePieces() {
 		for (Piece piece: pieces) {
 			piece.setDisable(false);
+			if (piece.isActiveImageOn()) piece.clearPlayer();
 		}
 	}
 	
@@ -592,6 +594,8 @@ public class Main extends Application {
 	
 	//Updates every message shown during game play. Called after every button press.
 	public void updateTurnInfo() {
+		updatePhase(true);
+		updatePhase(false);
 		whitePiecesRemaining.setText("Pieces remaining: " + board.whitePieces.size());
 		whitePlayerPhase.setText("Phase " + whitePhase);
 		
