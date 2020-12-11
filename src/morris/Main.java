@@ -147,6 +147,8 @@ public class Main extends Application {
     		nineMorrisRB.setSelected(true);
     		humanPlayerRB.setSelected(true);
     		gameStarted = false;
+		matchEndVBox.setDisable(true);
+        	matchEndVBox.setVisible(false);
         });
         
         // Event Handlers for radio controls
