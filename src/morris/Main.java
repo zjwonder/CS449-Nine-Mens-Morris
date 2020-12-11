@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import javafx.application.*;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
@@ -22,6 +23,8 @@ import javafx.scene.text.*;
 
 public class Main extends Application {
 	
+	
+	// All variables used by Main class are defined here
 	boolean isWhiteTurn, millFormed, winCondition, movingPiece, gameStarted = false, aiActive = false;
 	int whitePhase, blackPhase, moveFromID, moveToID, numPieces = 9, whiteWins = 0, blackWins = 0;
 	Board board = new Board(9);
@@ -46,30 +49,33 @@ public class Main extends Application {
 			whitePiecesRemaining = new Text(), blackPiecesRemaining = new Text(), whitePlayerPhase = new Text(), blackPlayerPhase = new Text(), 
 			tellWhenMillFormed = new Text(""), tellWhoseTurn = new Text(""), tellWhatToDo = new Text(""), whiteFlyingAllowed = new Text(), 
 			blackFlyingAllowed = new Text(), blackWinsText = new Text(), whiteWinsText = new Text();
-	Image startScreen = null, nineBG = new Image("file:src\\img\\nineMensMorris.png"),
-			sixBG = new Image("file:src\\img\\sixMensMorris.png"),
-			twelveBG = new Image("file:src\\img\\twelveMensMorris.png");
+	Image startScreen = null, nineBG = new Image("file:src\\img\\nineMensMorris.png"), sixBG = new Image("file:src\\img\\sixMensMorris.png"),
+			twelveBG = new Image("file:src\\img\\twelveMensMorris.png"), icon = new Image("file:src\\img\\black.png");
 	ImageView mv = new ImageView(startScreen);
 	
+	
+	// Launches JavaFX application thread
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
+	
+	// JavaFX logic where all scenes nodes, and events are defined
 	@Override
 	public void start(Stage stage) throws Exception{
 				
 		// Set up Stage 
     	stage.setResizable(false);
+		stage.setTitle("Nine Men's Morris"); 
+    	stage.setResizable(false);
+    	stage.getIcons().add(icon);
     	
     	// Set up Start scene, pane, and child nodes
     	Scene startScene = new Scene(startPane, 650, 750);
     	setStartNodes();
     	
-    	// Set up Board Scene
+    	// Set up Board Scene, pane, and child nodes
 		Scene boardScene = new Scene(boardPane, 934, 1024);
-		stage.setTitle("Nine Men's Morris"); 
-    	stage.setResizable(false);			 
-    	updateTurnInfo();
     	setBoardNodes();
      	
      	// Create all pieces
@@ -101,54 +107,41 @@ public class Main extends Application {
 		button22 = new Piece(); pieces.add(button22);
 		button23 = new Piece(); pieces.add(button23);
 		button24 = new Piece(); pieces.add(button24);
-		
 		boardPane.getChildren().addAll(pieces);
      
-		// Show window
+		// Show scene
         stage.setScene(startScene);
         stage.show();
         
-        
         // Start button event handler
         startButton.setOnAction(e -> {
-        		stage.setScene(boardScene);
-        		resetGame(numPieces);
-        		updateTurnInfo();
-        		whiteText.setText(nameField1.getText());
-        		blackText.setText(nameField2.getText());
-        		whiteWinsText.setText("Wins: " + whiteWins);
-        		blackWinsText.setText("Wins: " + blackWins);
-        		gameStarted = true;
+    		stage.setScene(boardScene);
+    		resetGame(numPieces);
+    		gameStarted = true;
         });
         
         // End of match 'play again' button event handler
         resetButton.setOnAction(e -> {
     		stage.setScene(boardScene);
     		resetGame(numPieces);
-    		updateTurnInfo();
-    		whiteText.setText(nameField1.getText());
-    		blackText.setText(nameField2.getText());
-    		whiteWinsText.setText("Wins: " + whiteWins);
-    		blackWinsText.setText("Wins: " + blackWins);
-    		gameStarted = true;
     		matchEndVBox.setDisable(true);
         	matchEndVBox.setVisible(false);
+    		gameStarted = true;
         });
         
         // End of match 'return to menu' button event handler
         returnButton.setOnAction(e -> {
     		stage.setScene(startScene);
     		resetGame(numPieces);
-    		updateTurnInfo();
     		whiteText.setText("White");
     		blackText.setText("Black");
     		whiteWins = 0;
     		blackWins = 0;
     		nineMorrisRB.setSelected(true);
     		humanPlayerRB.setSelected(true);
-    		gameStarted = false;
-		matchEndVBox.setDisable(true);
+    		matchEndVBox.setDisable(true);
         	matchEndVBox.setVisible(false);
+    		gameStarted = false;
         });
         
         // Event Handlers for radio controls
@@ -156,10 +149,9 @@ public class Main extends Application {
         nineMorrisRB.setOnAction(e -> {numPieces = 9; board.flyingAllowed = true; stage.setTitle("Nine Men's Morris");});
         twelveMorrisRB.setOnAction(e -> {numPieces = 12; board.flyingAllowed = true; stage.setTitle("Twelve Men's Morris");});
         aiPlayerRB.setOnAction(e -> aiActive = true);
-        humanPlayerRB.setOnAction(e -> aiActive = false);
+        humanPlayerRB.setOnAction(e -> aiActive = false);       
         
-        
-        //EventHandlers for buttons
+        //Event Handlers for gamepiece buttons
         button1.setOnAction(e->{SpaceButtonHandler(button1);});
         button2.setOnAction(e->{SpaceButtonHandler(button2);});
         button3.setOnAction(e->{SpaceButtonHandler(button3);});
@@ -360,10 +352,11 @@ public class Main extends Application {
      	boardPane.setStyle("-fx-background-color: linear-gradient(from 0% 10% to 0% 90%, #95a2b8, #172c42)");
 	}
 	
-	// Method called by button 1-24 event handlers. This is essentially the turn logic.
+	
+	// Method called by gamepiece button event handlers. This is essentially the turn logic.
 	public void SpaceButtonHandler(Piece piece) {
 		//Allows player to remove a piece when a mill is formed
-      	if (!piece.isDisable() && millFormed == true) {
+		if (!piece.isDisable() && millFormed == true) {
        		if (board.removePiece(isWhiteTurn, piece.getID()) == true) {
        			piece.clearPlayer();
 
@@ -430,7 +423,6 @@ public class Main extends Application {
        		piece.clearPlayer();
        	}      	
       	updateTurnInfo();
-
       	// AI phase one branch
        	if (aiActive && blackPhase == 1 && !isWhiteTurn) {
        		AIphaseOne();
@@ -443,7 +435,9 @@ public class Main extends Application {
    			updateTurnInfo();
    		}
     }
+
 	
+	// AI Logic for first gameplay phase
 	public void AIphaseOne() {
 		int index = board.AIplace();
   		Piece blackAI = pieces.get(index);
@@ -470,6 +464,8 @@ public class Main extends Application {
    		}
 	}
    
+	
+	// AI Logic for second and third gameplay phases
 	public void AIphaseTwoThree() {
   		int pieceIndex = board.AIpiece(blackPhase);
   		int spaceIndex = board.AImove(pieceIndex, blackPhase);
@@ -495,7 +491,8 @@ public class Main extends Application {
   		}
 	}
 	
-	//Enables the opponent's pieces. This is called after a mill is formed.
+	
+	// Enables the opponent's buttons. This is called after a mill is formed.
 	public void enablePiecesMillFormed() {
 		for (Piece piece: pieces) {
 			if (piece.isActiveImageOn()) piece.clearPlayer();
@@ -513,7 +510,8 @@ public class Main extends Application {
 		}
 	}
 	
-	//Enables a player's pieces in phase 2 and 3 so they can select a piece to move
+	
+	// Enables a player's buttons in phase 2 and 3 so they can select a piece to move
 	public void enablePieceToMoveFrom() {
 		for (Piece piece: pieces) {
 			if (blackPhase == 1) {
@@ -538,7 +536,8 @@ public class Main extends Application {
 		}
 	}
 	
-	//Enables all valid spaces that a selected piece can move to
+	
+	//Enables all valid buttons that a selected piece can move to
 	public void EnablePiecesToMoveTo(int moveFromID, int phase) {
 		
 		Set<Integer> validSpaces = new HashSet<Integer>();
@@ -557,7 +556,8 @@ public class Main extends Application {
 		}
 		}
 
-	//This just enables all pieces
+	
+	// Enables all buttons
 	public void reEnablePieces() {
 		for (Piece piece: pieces) {
 			piece.setDisable(false);
@@ -565,7 +565,8 @@ public class Main extends Application {
 		}
 	}
 	
-	//Only enables unoccupied spaces
+	
+	// Only enables unused buttons 
 	public void enableEmptySpaces() {
 		for (Piece piece: pieces) {
 			if (board.blackPieces.contains(piece.getID())) piece.setDisable(true);
@@ -574,6 +575,7 @@ public class Main extends Application {
 		}
 		
 	}
+	
 	
 	//This checks which phase the given player is in and updates the relevant variable
 	public void updatePhase(boolean isWhiteTurn) {
@@ -589,15 +591,15 @@ public class Main extends Application {
 	}
 	
 	
-	//Pretty self explanatory
+	// Disables board interaction and enables endgame choices
 	public void endGame() {
-		System.out.println("endgame");
 		matchEndVBox.setDisable(false);
 		matchEndVBox.setVisible(true);
 		for (Piece piece: pieces) {
 			piece.setDisable(true);
 		}
 	}
+	
 	
 	//Clears the board and sets it up for a new game	
 	public void resetGame(int numPieces) {
@@ -610,12 +612,15 @@ public class Main extends Application {
 		whitePhase = 1;
 		blackPhase = 1; 
 		moveFromID = 0;
+		whiteText.setText(nameField1.getText());
+		blackText.setText(nameField2.getText());
+		whiteWinsText.setText("Wins: " + whiteWins);
+		blackWinsText.setText("Wins: " + blackWins);
 		board.reset(numPieces);
 		board = new Board(numPieces);
 		updateTurnInfo();
-		
-		//for (Piece piece : pieces) System.out.println(piece.getID());
 	}
+	
 	
 	//Sets every space to have no owner
 	public void clearSpaces() {
@@ -624,6 +629,7 @@ public class Main extends Application {
 			piece.clearPlayer();
 		}
 	}
+	
 	
 	//Updates every message shown during game play. Called after every button press.
 	public void updateTurnInfo() {
@@ -681,6 +687,7 @@ public class Main extends Application {
 		
 	}
 	
+	
 	// reads data files containing button coordinates for various game types
 	public boolean readButtonData(int numPieces) {
 		File spaceData;
@@ -721,5 +728,4 @@ public class Main extends Application {
 			return false;
 		}
 	}
-	
 }
